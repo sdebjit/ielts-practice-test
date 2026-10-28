@@ -1,0 +1,2051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Prep & Improvement Tracker - Powered by Gemini AI</title>
+    <!-- Google Fonts Preconnect & Styles -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+                        serif: ['"Newsreader"', 'Georgia', 'serif'],
+                        mono: ['"JetBrains Mono"', 'Menlo', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col md:flex-row antialiased selection:bg-brand-100 selection:text-brand-900 font-sans hero-gradient">
+
+    <!-- STICKY MOBILE TOP BAR (visible on < md) -->
+    <header class="md:hidden sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 py-3 flex items-center justify-between shadow-sm">
+        <div class="flex items-center gap-2.5">
+            <button onclick="toggleMobileDrawer(true)" class="p-2 -ml-1 text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500" aria-label="Open navigation menu">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+            <div class="flex items-center gap-2">
+                <div class="px-2 py-0.5 rounded-md bg-[#D91C29] text-white font-black text-xs tracking-tight shadow-xs">
+                    IELTS
+                </div>
+                <span class="font-extrabold text-slate-900 text-sm tracking-tight">Master</span>
+                <span class="hidden sm:inline-flex px-1.5 py-0.2 rounded text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200">CD IELTS</span>
+            </div>
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-brand-50 text-brand-700 border border-brand-200">
+                <span id="mobile-overall-band">Not assessed</span>
+            </span>
+            <button onclick="handleUserProfileClick()" id="btn-mobile-user-profile" class="flex items-center gap-1.5 p-1 rounded-lg hover:bg-slate-100 transition-colors" title="Candidate Profile & Credentials">
+                <div id="mobile-user-avatar" class="w-7 h-7 rounded-full bg-gradient-to-tr from-rose-600 to-indigo-600 text-white font-bold text-[11px] flex items-center justify-center shadow-xs">
+                    AM
+                </div>
+            </button>
+            <button onclick="toggleIeltsStandardsModal(true)" class="p-1.5 rounded-lg text-emerald-700 bg-emerald-50 border border-emerald-200 hover:bg-emerald-100" title="Official Cambridge Standards">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </button>
+            <button onclick="toggleTheme()" class="btn-theme-toggle-mobile p-1.5 rounded-lg text-slate-600 hover:bg-slate-100 border border-slate-200 shadow-xs" title="Toggle Light / Dark Mode" aria-label="Toggle theme">
+                <svg class="theme-icon-sun-mob w-4 h-4 text-amber-400 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <svg class="theme-icon-moon-mob w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- MOBILE DRAWER BACKDROP -->
+    <div id="mobile-backdrop" onclick="toggleMobileDrawer(false)" class="backdrop-closed fixed inset-0 bg-slate-900/50 z-50 md:hidden"></div>
+
+    <!-- MOBILE DRAWER SLIDE-OVER -->
+    <aside id="mobile-drawer" class="drawer-closed fixed top-0 bottom-0 left-0 w-72 max-w-[85vw] bg-white z-50 shadow-2xl flex flex-col md:hidden">
+        <!-- Mobile Drawer Header -->
+        <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+            <div class="flex items-center space-x-2.5">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center text-white font-bold shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                </div>
+                <div>
+                    <h2 class="font-extrabold text-slate-900 text-sm leading-tight">IELTS Master</h2>
+                    <p class="text-[10px] font-semibold text-brand-600 flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        Gemini AI Guided
+                    </p>
+                </div>
+            </div>
+            <button onclick="toggleMobileDrawer(false)" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200" aria-label="Close menu">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+
+        <!-- Candidate Profile Card in Mobile Drawer -->
+        <div class="p-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+            <div onclick="handleUserProfileClick()" class="flex items-center gap-2.5 min-w-0 cursor-pointer hover:opacity-80 transition-opacity" title="View Candidate Profile & Credentials">
+                <div id="drawer-user-avatar" class="w-8 h-8 rounded-full bg-gradient-to-tr from-rose-600 to-indigo-600 text-white font-bold text-xs flex items-center justify-center shadow-sm shrink-0">
+                    AM
+                </div>
+                <div class="min-w-0">
+                    <div id="drawer-user-name" class="font-bold text-slate-800 text-xs truncate">Alex Morgan</div>
+                    <div id="drawer-user-email" class="text-[10px] text-slate-400 truncate">demo@ieltsmaster.com</div>
+                </div>
+            </div>
+            <div class="flex items-center gap-1" id="drawer-auth-actions">
+                <button onclick="openAuthModal('signin')" class="p-1 rounded text-slate-400 hover:text-brand-600 hover:bg-slate-200 transition-colors" title="Switch Account">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                </button>
+                <button onclick="handleLogout()" id="btn-drawer-logout" class="p-1 rounded text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors" title="Log Out">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Links -->
+        <nav class="p-3 space-y-1 flex-1 overflow-y-auto">
+            <button onclick="switchView('dashboard')" id="mobile-nav-dashboard" class="nav-tab active w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+                <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                Dashboard & Diagnostics
+            </button>
+
+            <div class="pt-3 pb-1 px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider">Practice Segments</div>
+
+            <button onclick="switchView('listening')" id="mobile-nav-listening" class="nav-tab w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+                <span class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"></path></svg>
+                    Listening
+                </span>
+                <span id="mobile-badge-listening-band" class="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-slate-100 text-slate-500">Not assessed</span>
+            </button>
+
+            <button onclick="switchView('reading')" id="mobile-nav-reading" class="nav-tab w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+                <span class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    Reading
+                </span>
+                <span id="mobile-badge-reading-band" class="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-slate-100 text-slate-500">Not assessed</span>
+            </button>
+
+            <button onclick="switchView('writing')" id="mobile-nav-writing" class="nav-tab w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+                <span class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                    Writing
+                </span>
+                <span id="mobile-badge-writing-band" class="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-slate-100 text-slate-500">Not assessed</span>
+            </button>
+
+            <button onclick="switchView('speaking')" id="mobile-nav-speaking" class="nav-tab w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+                <span class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                    Speaking
+                </span>
+                <span id="mobile-badge-speaking-band" class="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-slate-100 text-slate-500">Not assessed</span>
+            </button>
+
+            <div class="pt-3 pb-1 px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider">Learning Tools</div>
+
+            <button onclick="switchView('vocabulary')" id="mobile-nav-vocabulary" class="nav-tab w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+                <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
+                Band 8+ Vocabulary
+            </button>
+
+            <button onclick="switchView('settings')" id="mobile-nav-settings" class="nav-tab w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+                <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                Settings & API Key
+            </button>
+        </nav>
+
+        <!-- Bottom Streak Card in Mobile Drawer -->
+        <div class="p-4 border-t border-slate-200 bg-slate-50">
+            <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                <div class="flex items-center justify-between text-xs text-slate-500 mb-1.5">
+                    <span>Target Band</span>
+                    <span id="mobile-sidebar-target-band" class="font-bold text-slate-800 text-sm">7.5</span>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-2 mb-2">
+                    <div id="mobile-sidebar-progress-bar" class="bg-gradient-to-r from-brand-500 to-indigo-600 h-2 rounded-full" style="width: 75%"></div>
+                </div>
+                <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-100">
+                    <span class="flex items-center gap-1 text-amber-600 font-semibold">
+                        🔥 <span id="mobile-sidebar-streak-days">0</span> Day Streak
+                    </span>
+                    <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-emerald-50 text-emerald-700">
+                        Gemini Ready
+                    </span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- SIDEBAR NAVIGATION (Desktop - hidden on mobile) -->
+    <aside class="hidden md:flex md:w-64 bg-white border-r border-slate-200 flex-col shrink-0">
+        <!-- Logo & Brand Header -->
+        <div class="p-5 border-b border-slate-200 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="px-3 py-1.5 rounded-lg bg-[#D91C29] text-white font-black text-base tracking-tighter shadow-md shadow-rose-900/10 flex items-center justify-center">
+                    IELTS
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-slate-900 text-lg leading-tight tracking-tight">Master</h1>
+                    <p class="text-[11px] font-semibold text-slate-500 flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        Cambridge Benchmark
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Candidate Profile Card in Desktop Sidebar -->
+        <div class="p-3.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+            <div onclick="handleUserProfileClick()" class="flex items-center gap-2.5 min-w-0 cursor-pointer hover:opacity-85 transition-opacity" title="Candidate Profile & Credentials">
+                <div id="sidebar-user-avatar" class="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-600 to-indigo-600 text-white font-bold text-xs flex items-center justify-center shadow-sm shrink-0">
+                    AM
+                </div>
+                <div class="min-w-0">
+                    <div id="sidebar-user-name" class="font-bold text-slate-800 text-xs truncate">Alex Morgan</div>
+                    <div id="sidebar-user-email" class="text-[10px] text-slate-400 truncate">demo@ieltsmaster.com</div>
+                </div>
+            </div>
+            <div class="flex items-center gap-0.5" id="sidebar-auth-actions">
+                <button onclick="openAuthModal('signin')" class="p-1.5 rounded-lg text-slate-400 hover:text-brand-600 hover:bg-slate-200/60 transition-colors" title="Switch Account / Sign In">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                </button>
+                <button onclick="handleLogout()" id="btn-sidebar-logout" class="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors" title="Log Out">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigation Links -->
+        <nav class="p-3 space-y-1 flex-1 overflow-y-auto">
+            <button onclick="switchView('dashboard')" id="nav-dashboard" class="nav-tab active w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+                <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                Dashboard & Diagnostics
+            </button>
+
+            <div class="pt-3 pb-1 px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider">Practice Segments</div>
+
+            <button onclick="switchView('listening')" id="nav-listening" class="nav-tab w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+                <span class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"></path></svg>
+                    Listening
+                </span>
+                <span id="badge-listening-band" class="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-slate-100 text-slate-500">Not assessed</span>
+            </button>
+
+            <button onclick="switchView('reading')" id="nav-reading" class="nav-tab w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+                <span class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    Reading
+                </span>
+                <span id="badge-reading-band" class="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-slate-100 text-slate-500">Not assessed</span>
+            </button>
+
+            <button onclick="switchView('writing')" id="nav-writing" class="nav-tab w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+                <span class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                    Writing
+                </span>
+                <span id="badge-writing-band" class="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-slate-100 text-slate-500">Not assessed</span>
+            </button>
+
+            <button onclick="switchView('speaking')" id="nav-speaking" class="nav-tab w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+                <span class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                    Speaking
+                </span>
+                <span id="badge-speaking-band" class="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-slate-100 text-slate-500">Not assessed</span>
+            </button>
+
+            <div class="pt-3 pb-1 px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider">Learning Tools</div>
+
+            <button onclick="switchView('vocabulary')" id="nav-vocabulary" class="nav-tab w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+                <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
+                Band 8+ Vocabulary
+            </button>
+
+            <button onclick="switchView('settings')" id="nav-settings" class="nav-tab w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+                <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                Settings & API Key
+            </button>
+        </nav>
+
+        <!-- Bottom Daily Streak & Target Card -->
+        <div class="p-4 border-t border-slate-200 bg-slate-50">
+            <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                <div class="flex items-center justify-between text-xs text-slate-500 mb-1.5">
+                    <span>Target Band</span>
+                    <span id="sidebar-target-band" class="font-bold text-slate-800 text-sm">7.5</span>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-2 mb-2">
+                    <div id="sidebar-progress-bar" class="bg-gradient-to-r from-brand-500 to-indigo-600 h-2 rounded-full" style="width: 75%"></div>
+                </div>
+                <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-100">
+                    <span class="flex items-center gap-1 text-amber-600 font-semibold">
+                        🔥 <span id="sidebar-streak-days">0</span> Day Streak
+                    </span>
+                    <span id="gemini-status-pill" class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-emerald-50 text-emerald-700">
+                        Gemini Ready
+                    </span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+        <!-- Top App Bar -->
+        <header class="h-16 border-b border-slate-200 bg-white flex items-center justify-between px-6 shrink-0 sticky top-0 z-20">
+            <div class="flex items-center gap-3">
+                <h2 id="view-title" class="text-xl font-bold text-slate-800">Dashboard & Improvement Analytics</h2>
+                <span id="exam-type-badge" class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-brand-50 text-brand-700 border border-brand-200">Academic</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <!-- Simplistic Dark / Light Theme Toggle on the Right -->
+                <button onclick="toggleTheme()" id="btn-theme-toggle" class="p-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 border border-slate-200 transition-colors flex items-center justify-center shadow-xs" title="Toggle Light / Dark Mode" aria-label="Toggle theme">
+                    <!-- Sun icon when dark mode is active -->
+                    <svg id="theme-icon-sun" class="w-5 h-5 text-amber-400 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                    <!-- Moon icon when light mode is active -->
+                    <svg id="theme-icon-moon" class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                    </svg>
+                </button>
+
+                <button onclick="toggleIeltsStandardsModal(true)" class="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 hover:bg-emerald-100 text-xs font-bold transition-all shadow-sm">
+                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span>Cambridge Standards</span>
+                </button>
+                <div class="hidden sm:flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-xl text-xs font-medium text-slate-600">
+                    <span>Overall:</span>
+                    <span id="header-overall-band" class="text-rose-600 font-extrabold text-sm">Not yet assessed</span>
+                    <span class="text-slate-300">/</span>
+                    <span>Target:</span>
+                    <span id="header-target-band" class="font-bold text-slate-800 text-sm">7.5</span>
+                </div>
+                <button onclick="handleUserProfileClick()" id="btn-header-user-profile" class="hidden md:flex items-center gap-2 px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-colors shadow-xs" title="Candidate Profile & Credentials">
+                    <div id="header-user-avatar" class="w-6 h-6 rounded-full bg-gradient-to-tr from-rose-600 to-indigo-600 text-white font-bold text-[10px] flex items-center justify-center">
+                        AM
+                    </div>
+                    <div class="flex flex-col text-left leading-none">
+                        <span id="header-user-name" class="text-xs font-bold text-slate-800 max-w-[120px] truncate">Alex Morgan</span>
+                        <span id="header-user-id" class="text-[9px] text-slate-400 font-mono">ID: 849201</span>
+                    </div>
+                    <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <button onclick="refreshData()" class="p-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors border border-transparent hover:border-slate-200" title="Refresh diagnostics">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- VIEW CONTAINER -->
+        <div class="flex-1 p-6 max-w-7xl w-full mx-auto">
+
+            <!-- ========================================================= -->
+            <!-- 1. DASHBOARD VIEW -->
+            <!-- ========================================================= -->
+            <div id="view-dashboard" class="space-y-6">
+                <!-- HERO GREETING & MOTIVATION BANNER (HUMAN & PROFESSIONAL) -->
+                <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 p-6 sm:p-8 text-white shadow-xl border border-slate-800">
+                    <div class="absolute -right-12 -bottom-12 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="absolute -left-12 -top-12 w-64 h-64 bg-brand-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                    
+                    <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                        <div class="space-y-2.5 max-w-2xl">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-emerald-300 text-xs font-bold backdrop-blur-md border border-white/10">
+                                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                <span>🏛️ Cambridge Assessment English (Books 1–19) & IDP Benchmark</span>
+                            </div>
+                            <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                                Good day, <span id="hero-user-name" class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-200 via-sky-200 to-white">Debjit Sadhukhan</span> 👋
+                            </h2>
+                            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">
+                                Your diagnostic status is currently <strong id="hero-overall-status" class="text-amber-300 font-bold">Unassessed</strong>. In the real IELTS examination, your score begins from zero assumptions. Take any full practice test below to calibrate your baseline, discover hidden distractor patterns, and embark on your path to <strong class="text-white font-bold">Band 9.0 (Expert)</strong>.
+                            </p>
+                        </div>
+                        <div class="flex flex-col sm:flex-row lg:flex-col gap-2.5 shrink-0">
+                            <button onclick="loadRandomReadingTest()" class="px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-black text-xs shadow-lg shadow-emerald-500/25 flex items-center justify-center gap-2 transition-all active:scale-95">
+                                <span>📖 Start Diagnostic Reading (40 Qs)</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            </button>
+                            <button onclick="toggleIeltsStandardsModal(true)" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 font-bold text-xs border border-white/15 flex items-center justify-center gap-2 transition-all">
+                                <span>Official Cambridge Scoring Rules</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EXECUTIVE PERFORMANCE CARDS (BEAUTIFUL & HUMAN) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                    <!-- 1. Overall Band Score (Hero Card) -->
+                    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-700 via-indigo-800 to-slate-900 p-5 text-white shadow-lg shadow-indigo-600/20 flex flex-col justify-between card-lift border border-indigo-400/20">
+                        <div>
+                            <div class="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-indigo-200 mb-2">
+                                <span>Estimated Overall Band</span>
+                                <span id="dash-overall-trend-badge" class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-bold">Not yet assessed</span>
+                            </div>
+                            <div class="flex items-baseline gap-2 mb-1">
+                                <span id="dash-overall-band" class="text-3xl sm:text-4xl font-black tracking-tight text-white">Not yet assessed</span>
+                                <span id="dash-overall-max" class="text-indigo-200 text-xs font-bold hidden">/ 9.0</span>
+                            </div>
+                        </div>
+                        <div class="pt-3">
+                            <div class="w-full bg-white/20 rounded-full h-1.5 overflow-hidden">
+                                <div id="dash-overall-progress" class="bg-gradient-to-r from-amber-300 to-emerald-300 h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                            <p id="dash-band-gap-text" class="text-[11px] text-indigo-100 font-medium mt-2">
+                                Complete practice tests across modules to establish your score baseline
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 2. Target Goal & Readiness Milestone -->
+                    <div class="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between card-lift">
+                        <div>
+                            <div class="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+                                <span>Target Goal</span>
+                                <span id="dash-exam-date" class="text-[11px] font-semibold text-indigo-600">Exam date not set</span>
+                            </div>
+                            <div class="flex items-baseline gap-2 mb-1">
+                                <span id="dash-target-band" class="text-3xl sm:text-4xl font-black text-slate-900">7.5</span>
+                                <span class="text-xs font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 uppercase">Target Band</span>
+                            </div>
+                        </div>
+                        <div class="pt-3">
+                            <div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                                <div id="dash-target-progress" class="bg-emerald-500 h-1.5 rounded-full transition-all duration-500" style="width: 60%"></div>
+                            </div>
+                            <div class="flex items-center justify-between text-[11px] text-slate-500 font-medium mt-2">
+                                <span>Baseline Calibration:</span>
+                                <span class="font-bold text-slate-700">0/4 Modules Tested</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Study Streak & Consistency -->
+                    <div class="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between card-lift">
+                        <div>
+                            <div class="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+                                <span>Daily Practice Streak</span>
+                                <span class="text-amber-500 font-bold text-xs flex items-center gap-1">🔥 Active</span>
+                            </div>
+                            <div class="flex items-baseline gap-2 mb-1">
+                                <span id="dash-streak-days" class="text-3xl sm:text-4xl font-black text-amber-500">0</span>
+                                <span class="text-xs font-semibold text-slate-500">Days In A Row</span>
+                            </div>
+                        </div>
+                        <div class="pt-3">
+                            <div class="flex items-center justify-between gap-1 text-[10px] font-bold text-slate-400 mb-1">
+                                <span class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center">M</span>
+                                <span class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center">T</span>
+                                <span class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center">W</span>
+                                <span class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center">T</span>
+                                <span class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center">F</span>
+                                <span class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center">S</span>
+                                <span class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center">S</span>
+                            </div>
+                            <p class="text-[11px] text-slate-500 font-medium">Daily practice builds subconscious memory</p>
+                        </div>
+                    </div>
+
+                    <!-- 4. Cambridge Practice Volume -->
+                    <div class="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between card-lift">
+                        <div>
+                            <div class="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+                                <span>Cambridge Bank</span>
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-600">Books 1–19</span>
+                            </div>
+                            <div class="flex items-baseline gap-2 mb-1">
+                                <span id="dash-total-sessions" class="text-3xl sm:text-4xl font-black text-slate-900">0</span>
+                                <span class="text-xs font-semibold text-slate-500">Sessions (<span id="dash-total-mins">0</span> mins)</span>
+                            </div>
+                        </div>
+                        <div class="pt-3 border-t border-slate-100">
+                            <div class="flex items-center justify-between text-[11px] text-slate-500 font-medium">
+                                <span>Total Tests in Bank:</span>
+                                <strong class="text-slate-800 font-extrabold">480 Full Tests</strong>
+                            </div>
+                            <div class="flex items-center justify-between text-[11px] text-slate-500 font-medium mt-1">
+                                <span>Authentic Questions:</span>
+                                <strong class="text-slate-800 font-extrabold">9,840 Questions</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CAMBRIDGE SENIOR EXAMINER COACHING CORNER (HUMAN TOUCH) -->
+                <div class="bg-gradient-to-r from-amber-500/10 via-brand-500/5 to-emerald-500/10 rounded-2xl border border-amber-200/70 p-5">
+                    <div class="flex items-center justify-between pb-3 border-b border-amber-200/50 mb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="text-lg">👨‍🏫</span>
+                            <div>
+                                <h4 class="font-extrabold text-slate-900 text-sm">Cambridge Senior Examiners' Strategic Advice</h4>
+                                <p class="text-[11px] text-slate-500">Official examiner insights to avoid common candidate pitfalls</p>
+                            </div>
+                        </div>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 uppercase tracking-wide">Examiner Tips</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <!-- Examiner 1: Reading -->
+                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs flex items-start gap-3">
+                            <div class="w-9 h-9 rounded-full bg-sky-100 border border-sky-300 text-sky-800 font-black text-xs flex items-center justify-center shrink-0">
+                                AT
+                            </div>
+                            <div class="min-w-0">
+                                <div class="font-bold text-xs text-slate-900">Dr. Alistair Thorne</div>
+                                <div class="text-[10px] text-sky-600 font-medium mb-1">Academic Reading Examiner</div>
+                                <p class="text-[11px] text-slate-600 leading-snug">
+                                    "In Passage 3 Yes/No/Not Given, remember: 'NO' explicitly contradicts the author's argument. 'NOT GIVEN' means the author never took that definitive stance."
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Examiner 2: Speaking -->
+                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs flex items-start gap-3">
+                            <div class="w-9 h-9 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-800 font-black text-xs flex items-center justify-center shrink-0">
+                                SJ
+                            </div>
+                            <div class="min-w-0">
+                                <div class="font-bold text-xs text-slate-900">Sarah Jenkins</div>
+                                <div class="text-[10px] text-emerald-600 font-medium mb-1">Senior Speaking Specialist</div>
+                                <p class="text-[11px] text-slate-600 leading-snug">
+                                    "In Part 2, spend your 1-minute prep brainstorming 3 advanced topic-specific collocations rather than full sentences. That immediately boosts your Lexical mark."
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Examiner 3: Writing -->
+                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs flex items-start gap-3">
+                            <div class="w-9 h-9 rounded-full bg-amber-100 border border-amber-300 text-amber-800 font-black text-xs flex items-center justify-center shrink-0">
+                                MV
+                            </div>
+                            <div class="min-w-0">
+                                <div class="font-bold text-xs text-slate-900">Marcus Vance</div>
+                                <div class="text-[10px] text-amber-600 font-medium mb-1">Chief Writing Evaluator</div>
+                                <p class="text-[11px] text-slate-600 leading-snug">
+                                    "In Task 1, never list every number. Examiners look for meaningful groupings, 2 clear contrasts, and an overview paragraph highlighting overall trends."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4-SKILL CAMBRIDGE PRACTICE HUB (BEAUTIFUL & INTERACTIVE CARDS) -->
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#D91C29]"></span>
+                                <span>IELTS 4-Skill Practice Hub (120 Sets Per Module)</span>
+                            </h3>
+                            <p class="text-xs text-slate-500">Pick any module to practice with official Cambridge strictness and timing</p>
+                        </div>
+                        <span class="text-xs font-bold text-slate-500">100% Cambridge Standard</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <!-- 1. Listening Hub Card -->
+                        <div class="bg-gradient-to-br from-indigo-50/80 via-white to-white rounded-2xl p-5 border border-indigo-200 shadow-sm flex flex-col justify-between card-interactive hover:border-indigo-400">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold shadow-md shadow-indigo-500/20 text-lg">
+                                        🎧
+                                    </div>
+                                    <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700">120 Sets</span>
+                                </div>
+                                <h4 class="font-black text-slate-900 text-sm mb-1">Listening Simulation</h4>
+                                <p class="text-xs text-slate-500 leading-relaxed mb-3">
+                                    4 official sections: Social dialogue, visitor tour, university tutorial, and academic lecture.
+                                </p>
+                                <div class="space-y-1 text-[11px] font-semibold text-slate-600 mb-4">
+                                    <div class="flex items-center gap-1.5">✓ 40 Questions per set</div>
+                                    <div class="flex items-center gap-1.5">✓ Audio player with British voice</div>
+                                    <div class="flex items-center gap-1.5">✓ Cambridge distractor traps</div>
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <button onclick="loadRandomListeningTest()" class="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md shadow-indigo-500/20 flex items-center justify-center gap-2 transition-all active:scale-95">
+                                    <span>🎲 Start Random Test</span>
+                                </button>
+                                <button onclick="loadRandomListeningTest(true)" class="w-full py-1.5 rounded-lg text-indigo-700 hover:bg-indigo-100/60 font-semibold text-xs transition-colors">
+                                    Start Practice Exam →
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 2. Reading Hub Card -->
+                        <div class="bg-gradient-to-br from-sky-50/80 via-white to-white rounded-2xl p-5 border border-sky-200 shadow-sm flex flex-col justify-between card-interactive hover:border-sky-400">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="w-10 h-10 rounded-xl bg-sky-600 text-white flex items-center justify-center font-bold shadow-md shadow-sky-500/20 text-lg">
+                                        📖
+                                    </div>
+                                    <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-sky-100 text-sky-700">120 Sets</span>
+                                </div>
+                                <h4 class="font-black text-slate-900 text-sm mb-1">Academic Reading Suite</h4>
+                                <p class="text-xs text-slate-500 leading-relaxed mb-3">
+                                    3 authentic passages (~2,400 words) with True/False/Not Given, Heading Matching, and Summaries.
+                                </p>
+                                <div class="space-y-1 text-[11px] font-semibold text-slate-600 mb-4">
+                                    <div class="flex items-center gap-1.5">✓ Full 40 Questions per set</div>
+                                    <div class="flex items-center gap-1.5">✓ Split screen + text highlighter</div>
+                                    <div class="flex items-center gap-1.5">✓ Authentic CD IELTS palette</div>
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <button onclick="loadRandomReadingTest()" class="w-full py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs shadow-md shadow-sky-500/20 flex items-center justify-center gap-2 transition-all active:scale-95">
+                                    <span>🎲 Start Random Test</span>
+                                </button>
+                                <button onclick="loadRandomReadingTest(true)" class="w-full py-1.5 rounded-lg text-sky-700 hover:bg-sky-100/60 font-semibold text-xs transition-colors">
+                                    Start Practice Exam →
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 3. Writing Hub Card -->
+                        <div class="bg-gradient-to-br from-amber-50/80 via-white to-white rounded-2xl p-5 border border-amber-200 shadow-sm flex flex-col justify-between card-interactive hover:border-amber-400">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="w-10 h-10 rounded-xl bg-amber-600 text-white flex items-center justify-center font-bold shadow-md shadow-amber-500/20 text-lg">
+                                        ✍️
+                                    </div>
+                                    <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">120 Tasks</span>
+                                </div>
+                                <h4 class="font-black text-slate-900 text-sm mb-1">Writing Evaluation Lab</h4>
+                                <p class="text-xs text-slate-500 leading-relaxed mb-3">
+                                    60 Task 1 visual reports + 60 Task 2 discursive essays, each with authentic Band 9 model answers.
+                                </p>
+                                <div class="space-y-1 text-[11px] font-semibold text-slate-600 mb-4">
+                                    <div class="flex items-center gap-1.5">✓ Line, Bar, Pie, Maps & Process</div>
+                                    <div class="flex items-center gap-1.5">✓ Live examiner word counter</div>
+                                    <div class="flex items-center gap-1.5">✓ Line-by-line Gemini correction</div>
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <button onclick="loadRandomWritingTask()" class="w-full py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-md shadow-amber-500/20 flex items-center justify-center gap-2 transition-all active:scale-95">
+                                    <span>🎲 Start Random Task</span>
+                                </button>
+                                <button onclick="loadRandomWritingTask(true)" class="w-full py-1.5 rounded-lg text-amber-800 hover:bg-amber-100/60 font-semibold text-xs transition-colors">
+                                    Start Practice Exam →
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 4. Speaking Hub Card -->
+                        <div class="bg-gradient-to-br from-rose-50/80 via-white to-white rounded-2xl p-5 border border-rose-200 shadow-sm flex flex-col justify-between card-interactive hover:border-rose-400">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center font-bold shadow-md shadow-rose-500/20 text-lg">
+                                        🗣️
+                                    </div>
+                                    <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-rose-100 text-rose-700">120 Mocks</span>
+                                </div>
+                                <h4 class="font-black text-slate-900 text-sm mb-1">Speaking Full Mock</h4>
+                                <p class="text-xs text-slate-500 leading-relaxed mb-3">
+                                    Complete 3-part interviews with live voice examiner, 1-min cue card scratchpad, and transcription.
+                                </p>
+                                <div class="space-y-1 text-[11px] font-semibold text-slate-600 mb-4">
+                                    <div class="flex items-center gap-1.5">✓ Parts 1, 2, and 3 simulation</div>
+                                    <div class="flex items-center gap-1.5">✓ Voice STT without stutter</div>
+                                    <div class="flex items-center gap-1.5">✓ Fluency & Pronunciation score</div>
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <button onclick="loadRandomSpeakingTest()" class="w-full py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow-md shadow-rose-500/20 flex items-center justify-center gap-2 transition-all active:scale-95">
+                                    <span>🎲 Start Random Mock</span>
+                                </button>
+                                <button onclick="loadRandomSpeakingTest(true)" class="w-full py-1.5 rounded-lg text-rose-700 hover:bg-rose-100/60 font-semibold text-xs transition-colors">
+                                    Start Practice Exam →
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI DIAGNOSTIC ASSESSMENT & ROADMAP -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 gap-2">
+                        <div>
+                            <h3 class="text-lg font-extrabold text-slate-900 flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-indigo-600"></span>
+                                Diagnostic Assessment: Exactly What You Need to Improve
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-0.5">Automated deep analysis across all 4 segments based on your historical answers & examiner evaluations</p>
+                        </div>
+                        <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-indigo-50 text-indigo-700 self-start sm:self-auto border border-indigo-200">
+                            Gemini AI Insights
+                        </span>
+                    </div>
+
+                    <!-- 4 Segment Diagnostic Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-5">
+                        <!-- Listening Diagnostics Card -->
+                        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200/80 flex flex-col justify-between hover:border-indigo-300 transition-colors">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+                                        <span class="text-indigo-600">🎧</span> Listening
+                                    </span>
+                                    <div class="flex items-center gap-1.5">
+                                        <span id="dash-diag-l-trend" class="hidden text-[10px] font-bold px-1.5 py-0.5 rounded"></span>
+                                        <span id="dash-diag-l-band" class="font-bold text-xs bg-slate-200/70 text-slate-600 px-2 py-0.5 rounded-full">Not assessed</span>
+                                    </div>
+                                </div>
+                                <div class="text-xs text-slate-500 mb-1">Weakest Question Type:</div>
+                                <div id="dash-diag-l-weakest" class="text-xs font-bold text-slate-600 mb-2">Not yet assessed</div>
+                                <p id="dash-diag-l-advice" class="text-[11px] text-slate-500 line-clamp-3 leading-relaxed">
+                                    Take your first Listening practice test to establish your baseline and uncover question-type accuracy.
+                                </p>
+                            </div>
+                            <button onclick="switchView('listening')" class="mt-4 w-full py-1.5 text-xs font-semibold rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition-colors">
+                                Practice Listening →
+                            </button>
+                        </div>
+
+                        <!-- Reading Diagnostics Card -->
+                        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200/80 flex flex-col justify-between hover:border-sky-300 transition-colors">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+                                        <span class="text-sky-600">📖</span> Reading
+                                    </span>
+                                    <div class="flex items-center gap-1.5">
+                                        <span id="dash-diag-r-trend" class="hidden text-[10px] font-bold px-1.5 py-0.5 rounded"></span>
+                                        <span id="dash-diag-r-band" class="font-bold text-xs bg-slate-200/70 text-slate-600 px-2 py-0.5 rounded-full">Not assessed</span>
+                                    </div>
+                                </div>
+                                <div class="text-xs text-slate-500 mb-1">Weakest Question Type:</div>
+                                <div id="dash-diag-r-weakest" class="text-xs font-bold text-slate-600 mb-2">Not yet assessed</div>
+                                <p id="dash-diag-r-advice" class="text-[11px] text-slate-500 line-clamp-3 leading-relaxed">
+                                    Take your first Reading test to diagnose True/False/Not Given, Heading Matching, and summary completion.
+                                </p>
+                            </div>
+                            <button onclick="switchView('reading')" class="mt-4 w-full py-1.5 text-xs font-semibold rounded-lg bg-sky-50 text-sky-700 hover:bg-sky-100 transition-colors">
+                                Practice Reading →
+                            </button>
+                        </div>
+
+                        <!-- Writing Diagnostics Card -->
+                        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200/80 flex flex-col justify-between hover:border-amber-300 transition-colors">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+                                        <span class="text-amber-600">✍️</span> Writing
+                                    </span>
+                                    <div class="flex items-center gap-1.5">
+                                        <span id="dash-diag-w-trend" class="hidden text-[10px] font-bold px-1.5 py-0.5 rounded"></span>
+                                        <span id="dash-diag-w-band" class="font-bold text-xs bg-slate-200/70 text-slate-600 px-2 py-0.5 rounded-full">Not assessed</span>
+                                    </div>
+                                </div>
+                                <div class="text-xs text-slate-500 mb-1">Bottleneck Criterion:</div>
+                                <div id="dash-diag-w-bottleneck" class="text-xs font-bold text-slate-600 mb-2">Not yet assessed</div>
+                                <p id="dash-diag-w-advice" class="text-[11px] text-slate-500 line-clamp-3 leading-relaxed">
+                                    Submit an essay to receive line-by-line grammar corrections and Band 9 criteria feedback from Gemini AI.
+                                </p>
+                            </div>
+                            <button onclick="switchView('writing')" class="mt-4 w-full py-1.5 text-xs font-semibold rounded-lg bg-amber-50 text-amber-700 hover:bg-amber-100 transition-colors">
+                                Practice Writing →
+                            </button>
+                        </div>
+
+                        <!-- Speaking Diagnostics Card -->
+                        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200/80 flex flex-col justify-between hover:border-emerald-300 transition-colors">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+                                        <span class="text-emerald-600">🗣️</span> Speaking
+                                    </span>
+                                    <div class="flex items-center gap-1.5">
+                                        <span id="dash-diag-s-trend" class="hidden text-[10px] font-bold px-1.5 py-0.5 rounded"></span>
+                                        <span id="dash-diag-s-band" class="font-bold text-xs bg-slate-200/70 text-slate-600 px-2 py-0.5 rounded-full">Not assessed</span>
+                                    </div>
+                                </div>
+                                <div class="text-xs text-slate-500 mb-1">Bottleneck Criterion:</div>
+                                <div id="dash-diag-s-bottleneck" class="text-xs font-bold text-slate-600 mb-2">Not yet assessed</div>
+                                <p id="dash-diag-s-advice" class="text-[11px] text-slate-500 line-clamp-3 leading-relaxed">
+                                    Record a 3-part examiner interview to assess spoken fluency, grammatical range, and filler words.
+                                </p>
+                            </div>
+                            <button onclick="switchView('speaking')" class="mt-4 w-full py-1.5 text-xs font-semibold rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition-colors">
+                                Practice Speaking →
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Top 3 Actionable Priorities -->
+                    <div class="mt-6 pt-5 border-t border-slate-100">
+                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Targeted Action Roadmap (To Reach Your Goal)</h4>
+                        <div id="dash-priorities-list" class="space-y-2.5">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visual Charts Row -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Radar Chart: 4 Segments Competency Balance -->
+                    <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-col">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="font-bold text-slate-800 text-sm">4-Segment Skill Mastery (Radar)</h3>
+                            <span class="text-xs text-slate-400">Target vs Current</span>
+                        </div>
+                        <div class="flex-1 relative min-h-[260px] flex items-center justify-center">
+                            <canvas id="radarChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Line Chart: Practice Progress Trendline -->
+                    <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-col">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="font-bold text-slate-800 text-sm">Score Progression Timeline</h3>
+                            <span class="text-xs text-slate-400">Past Test Attempts</span>
+                        </div>
+                        <div class="flex-1 relative min-h-[260px] flex items-center justify-center">
+                            <canvas id="trendChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Attempts Table -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+                        <h3 class="font-bold text-slate-800 text-sm">Recent Practice Submissions & AI Evaluations</h3>
+                        <span class="text-xs text-slate-400">Stored in SQLite</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-50 text-slate-500 font-semibold border-b border-slate-100">
+                                <tr>
+                                    <th class="p-3.5 pl-5">Date</th>
+                                    <th class="p-3.5">Module</th>
+                                    <th class="p-3.5">Test Title</th>
+                                    <th class="p-3.5">Band Score</th>
+                                    <th class="p-3.5">Key Metric / Criteria</th>
+                                    <th class="p-3.5 pr-5 text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dash-attempts-tbody" class="divide-y divide-slate-100">
+                                <tr>
+                                    <td colspan="6" class="p-5 text-center text-slate-400">No practice attempts recorded yet. Choose a module from the sidebar to begin!</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================================= -->
+            <!-- 2. LISTENING VIEW -->
+            <!-- ========================================================= -->
+            <div id="view-listening" class="hidden space-y-4">
+                <!-- OFFICIAL CD IELTS CANDIDATE HEADER STRIP (LISTENING) -->
+                <div class="cd-ielts-exam-header rounded-2xl p-3.5 px-5 flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-md">
+                    <div class="flex flex-wrap items-center gap-3 text-xs">
+                        <div class="px-2 py-0.5 rounded bg-[#D91C29] text-white font-extrabold tracking-wider text-[11px]">
+                            IELTS ACADEMIC
+                        </div>
+                        <div class="text-slate-200">
+                            Candidate: <strong id="cd-listening-candidate-name" class="text-white font-bold">Alex Morgan</strong>
+                        </div>
+                        <div class="text-slate-400 hidden sm:inline">•</div>
+                        <div class="text-slate-300 hidden sm:inline">
+                            Candidate No.: <span id="cd-listening-candidate-id" class="font-mono text-slate-100 font-semibold">849201</span>
+                        </div>
+                        <div class="text-slate-400 hidden lg:inline">•</div>
+                        <div class="text-slate-300 hidden lg:inline">
+                            Module: <span class="font-medium text-indigo-300">Listening (4 Sections • 40 Questions)</span>
+                        </div>
+                    </div>
+
+                    <!-- Center: CD IELTS Official Clock with Hide Toggle (Listening: 30:00) -->
+                    <div class="flex items-center gap-2 self-start md:self-auto">
+                        <div class="flex items-center gap-2 bg-slate-800/90 px-3 py-1 rounded-xl border border-slate-700">
+                            <span id="listening-timer-container" class="flex items-center gap-1.5 font-mono text-sm sm:text-base font-extrabold text-rose-300">
+                                <svg class="w-4 h-4 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <span id="listening-timer">30:00</span>
+                            </span>
+                            <button onclick="toggleClockVisibility('listening')" id="btn-toggle-listening-clock" class="text-[11px] px-2 py-0.5 rounded bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold transition-colors">
+                                Hide Clock
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right: Assigned Set Badge & Next Exam Controls -->
+                    <div class="flex flex-wrap items-center gap-2">
+                        <div class="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-indigo-950/80 border border-indigo-700/60 text-xs font-mono font-bold text-indigo-200" title="Assigned Official Cambridge Exam">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                            <span id="badge-listening-test-id">Exam Set: L-01</span>
+                        </div>
+                        <button onclick="loadRandomListeningTest()" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white flex items-center gap-1 transition-colors shadow-xs" title="Generate Next Random Cambridge Listening Set">
+                            <span>🎲 Next Exam</span>
+                        </button>
+                        <span id="badge-listening-count" class="text-[11px] font-bold px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">120 Sets</span>
+                        <button onclick="toggleAudioScript()" id="btn-toggle-script" class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 transition-colors">
+                            📜 Script
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Test Title Bar & Audio Simulator -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="px-2 py-0.5 text-xs font-bold rounded-full bg-indigo-100 text-indigo-700">Computer-Delivered Listening</span>
+                                <span class="px-2 py-0.5 text-xs font-bold rounded-full bg-slate-100 text-slate-700 border border-slate-200">🏛️ Cambridge Benchmark</span>
+                                <span class="text-xs text-slate-400">4 Sections • 40 Questions • Official British Dialects & Traps</span>
+                            </div>
+                            <h3 id="listening-test-title" class="text-base font-extrabold text-slate-900">Loading Listening Test...</h3>
+                        </div>
+                    </div>
+
+                    <!-- Audio Player Console (Web Speech Synthesis / Audio Simulation) -->
+                    <div class="mt-5 p-4 rounded-xl bg-slate-900 text-white flex flex-col md:flex-row items-center justify-between gap-4">
+                        <div class="flex items-center gap-4 w-full md:w-auto">
+                            <button id="btn-audio-play" onclick="toggleAudioPlayback()" class="w-12 h-12 rounded-full bg-brand-500 hover:bg-brand-600 flex items-center justify-center text-white shadow-lg transition-transform active:scale-95 shrink-0">
+                                <svg id="audio-icon-play" class="w-6 h-6 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                <svg id="audio-icon-pause" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                            </button>
+                            <div>
+                                <div class="text-xs font-semibold text-slate-300">Examiner Voice Audio Player</div>
+                                <div class="text-[11px] text-slate-400 flex items-center gap-2 mt-0.5">
+                                    <span id="audio-status-text">Ready to play</span>
+                                    <span class="inline-flex gap-0.5 items-end h-3" id="audio-waveforms">
+                                        <span class="soundwave-bar"></span>
+                                        <span class="soundwave-bar"></span>
+                                        <span class="soundwave-bar"></span>
+                                        <span class="soundwave-bar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Speed & Voice Engine Controls & Exam Countdown -->
+                        <div class="flex flex-wrap items-center gap-3">
+                            <!-- Official 30-min Listening Exam Timer Badge -->
+                            <div id="listening-countdown-badge" class="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-800 text-amber-300 border border-slate-700 text-xs font-mono font-bold" title="Official 30-Minute CD IELTS Listening Clock">
+                                <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <span>⏱️ <span id="listening-sub-timer">30:00</span> remaining</span>
+                            </div>
+
+                            <!-- Voice Persona Selector -->
+                            <div class="flex items-center gap-1.5 bg-slate-800/90 px-2.5 py-1 rounded-lg border border-slate-700">
+                                <span class="text-[11px] text-slate-400 font-medium">Voice:</span>
+                                <select id="select-listening-voice" onchange="updateListeningVoiceSelection(this.value)" class="bg-transparent text-xs text-slate-200 font-semibold focus:outline-none cursor-pointer max-w-[210px] truncate" title="Select Examiner Voice">
+                                    <optgroup label="🌟 Gemini AI Studio Neural Voices">
+                                        <option value="gemini:Puck" class="bg-slate-900 text-white" selected>👨‍🏫 Puck (Natural British)</option>
+                                        <option value="gemini:Aoede" class="bg-slate-900 text-white">👩‍🏫 Aoede (Expressive Academic)</option>
+                                        <option value="gemini:Charon" class="bg-slate-900 text-white">👨‍💼 Charon (Cambridge Senior)</option>
+                                        <option value="gemini:Kore" class="bg-slate-900 text-white">👩‍💼 Kore (Calm Professional)</option>
+                                        <option value="gemini:Fenrir" class="bg-slate-900 text-white">🎙️ Fenrir (Deep Resonant Male)</option>
+                                    </optgroup>
+                                    <optgroup label="🎙️ High-Def System Voices">
+                                        <option value="browser:auto" class="bg-slate-900 text-white">⚡ Auto-Select Best Cambridge Voice</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+
+                            <!-- Speed Controls -->
+                            <div class="flex items-center gap-1">
+                                <span class="text-xs text-slate-400 mr-1">Speed:</span>
+                                <button onclick="setAudioSpeed(0.85)" class="audio-speed-btn px-2 py-1 text-xs font-medium rounded bg-slate-800 text-slate-300 hover:bg-slate-700">0.85x</button>
+                                <button onclick="setAudioSpeed(1.0)" class="audio-speed-btn px-2 py-1 text-xs font-medium rounded bg-brand-600 text-white">1.0x</button>
+                                <button onclick="setAudioSpeed(1.2)" class="audio-speed-btn px-2 py-1 text-xs font-medium rounded bg-slate-800 text-slate-300 hover:bg-slate-700">1.2x</button>
+                            </div>
+
+                            <!-- Quick Voice Test -->
+                            <button onclick="previewExaminerVoice()" id="btn-listening-test-voice" class="px-2.5 py-1 text-xs font-medium rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 flex items-center gap-1 transition-colors" title="Preview current examiner voice">
+                                <span>🔊 Test</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Collapsible Audio Script -->
+                    <div id="listening-script-box" class="hidden mt-4 p-4 rounded-xl bg-amber-50 border border-amber-200 text-slate-700 text-xs font-mono whitespace-pre-wrap leading-relaxed max-h-60 overflow-y-auto">
+                        <!-- Script content loaded here -->
+                    </div>
+                </div>
+
+                <!-- Listening Questions Container -->
+                <div id="listening-sections-container" class="space-y-6">
+                    <!-- Loaded dynamically -->
+                </div>
+
+                <!-- Submit Button -->
+                <div class="flex justify-end pt-4">
+                    <button onclick="submitListeningTest()" class="px-6 py-3 rounded-xl bg-brand-600 text-white font-bold hover:bg-brand-700 shadow-lg shadow-brand-500/20 transition-all flex items-center gap-2">
+                        <span>Check Answers & Calculate Band Score</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ========================================================= -->
+            <!-- 3. READING VIEW (AUTHENTIC 40 QUESTIONS SPLIT-SCREEN) -->
+            <!-- ========================================================= -->
+            <div id="view-reading" class="hidden space-y-4">
+                <!-- OFFICIAL CD IELTS CANDIDATE HEADER STRIP -->
+                <div class="cd-ielts-exam-header rounded-2xl p-3.5 px-5 flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-md">
+                    <!-- Candidate & Module Info -->
+                    <div class="flex flex-wrap items-center gap-3 text-xs">
+                        <div class="px-2 py-0.5 rounded bg-[#D91C29] text-white font-extrabold tracking-wider text-[11px]">
+                            IELTS ACADEMIC
+                        </div>
+                        <div class="text-slate-200">
+                            Candidate: <strong id="cd-reading-candidate-name" class="text-white font-bold">Alex Morgan</strong>
+                        </div>
+                        <div class="text-slate-400 hidden sm:inline">•</div>
+                        <div class="text-slate-300 hidden sm:inline">
+                            Candidate No.: <span id="cd-reading-candidate-id" class="font-mono text-slate-100 font-semibold">849201</span>
+                        </div>
+                        <div class="text-slate-400 hidden lg:inline">•</div>
+                        <div class="text-slate-300 hidden lg:inline">
+                            Module: <span class="font-medium text-sky-300">Reading (3 Passages • 40 Questions)</span>
+                        </div>
+                    </div>
+
+                    <!-- Center: CD IELTS Official Clock with Hide Toggle -->
+                    <div class="flex items-center gap-2 self-start md:self-auto">
+                        <div class="flex items-center gap-2 bg-slate-800/90 px-3 py-1 rounded-xl border border-slate-700">
+                            <span id="reading-timer-container" class="flex items-center gap-1.5 font-mono text-sm sm:text-base font-extrabold text-rose-300">
+                                <svg class="w-4 h-4 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <span id="reading-timer">60:00</span>
+                            </span>
+                            <button onclick="toggleClockVisibility('reading')" id="btn-toggle-clock" class="text-[11px] px-2 py-0.5 rounded bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold transition-colors">
+                                Hide Clock
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right: Assigned Set Badge, Next Exam Button & Font Controls -->
+                    <div class="flex flex-wrap items-center gap-2 self-end md:self-auto">
+                        <div class="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-sky-950/80 border border-sky-700/60 text-xs font-mono font-bold text-sky-200" title="Assigned Official Cambridge Exam">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                            <span id="badge-reading-test-id">Exam Set: R-01</span>
+                        </div>
+                        <button onclick="loadRandomReadingTest()" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-sky-600 hover:bg-sky-500 text-white flex items-center gap-1 transition-colors shadow-xs" title="Generate Next Random Cambridge Reading Set">
+                            <span>🎲 Next Exam</span>
+                        </button>
+                        <span id="badge-reading-count" class="text-[11px] font-bold px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">120 Sets</span>
+                        <!-- Font Size controls -->
+                        <div class="flex items-center gap-0.5 bg-slate-800 p-0.5 rounded-lg border border-slate-700 text-xs font-semibold">
+                            <button onclick="setReadingFontSize('sm')" id="btn-font-sm" class="px-2 py-0.5 rounded text-slate-300 hover:text-white transition-colors" title="Small Text">A-</button>
+                            <button onclick="setReadingFontSize('base')" id="btn-font-base" class="px-2 py-0.5 rounded bg-white text-slate-900 font-bold shadow-xs transition-colors" title="Normal Text">A</button>
+                            <button onclick="setReadingFontSize('lg')" id="btn-font-lg" class="px-2 py-0.5 rounded text-slate-300 hover:text-white transition-colors" title="Large Text">A+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sub-bar: Test Title & Clue Highlights notice & Official 60-min Exam Timer Badge -->
+                <div class="bg-white rounded-xl border border-slate-200 px-4 py-2.5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <h3 id="reading-test-title" class="font-extrabold text-slate-900 text-sm truncate">
+                        IELTS Academic Reading Test 1 (Authentic Cambridge Benchmark • Full 40 Questions)
+                    </h3>
+                    <div class="flex items-center gap-2.5 text-[11px] text-slate-500 shrink-0">
+                        <div id="reading-countdown-badge" class="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-rose-50 text-rose-700 border border-rose-200 text-xs font-mono font-bold" title="Official 60-Minute CD IELTS Reading Clock">
+                            <svg class="w-3.5 h-3.5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span>⏱️ <span id="reading-sub-timer">60:00</span> remaining</span>
+                        </div>
+                        <span>💡 Tip: Select text in the passage to highlight in yellow</span>
+                    </div>
+                </div>
+
+                <!-- Mobile Reading Switcher (Passage vs Questions) -->
+                <div class="lg:hidden flex rounded-xl bg-slate-100 p-1 text-xs font-semibold border border-slate-200">
+                    <button id="btn-mobile-show-passage" onclick="setReadingMobileTab('passage')" class="flex-1 py-2 rounded-lg bg-white text-brand-600 font-bold shadow-sm flex items-center justify-center gap-1.5 transition-all">
+                        <svg class="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                        <span>Passage Text</span>
+                    </button>
+                    <button id="btn-mobile-show-questions" onclick="setReadingMobileTab('questions')" class="flex-1 py-2 rounded-lg text-slate-600 hover:text-slate-900 font-medium flex items-center justify-center gap-1.5 transition-all">
+                        <svg class="w-4 h-4 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span>Questions (<span id="mobile-reading-answered-count">0/40</span>)</span>
+                    </button>
+                </div>
+
+                <!-- Split-Pane: Passage on Left, Questions on Right -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 split-pane-container">
+                    <!-- Left: Authentic CD IELTS Reading Paper -->
+                    <div id="reading-passage-column" class="cd-ielts-paper rounded-2xl p-6 shadow-sm overflow-y-auto custom-scrollbar flex flex-col card-lift">
+                        <div class="border-b border-slate-200/80 pb-3 mb-4 flex items-center justify-between">
+                            <h4 id="reading-passage-heading" class="font-bold text-slate-900 text-sm">Passage 1</h4>
+                            <span class="text-[11px] text-slate-500 font-medium">Cambridge Official Reading Text</span>
+                        </div>
+                        <div id="reading-passage-body" class="text-sm text-slate-800 leading-relaxed space-y-4 font-serif reading-text-base">
+                            <!-- Injected dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Right: Questions & Answer Sheet -->
+                    <div id="reading-questions-column" class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm overflow-y-auto custom-scrollbar hidden lg:flex flex-col card-lift">
+                        <div class="border-b border-slate-100 pb-3 mb-4 flex items-center justify-between">
+                            <h4 id="reading-passage-q-heading" class="font-bold text-slate-900 text-sm">Questions 1 – 13</h4>
+                            <span id="reading-answered-badge" class="text-xs text-sky-600 font-bold">0 / 40 Answered</span>
+                        </div>
+                        <div id="reading-questions-container" class="space-y-5 flex-1">
+                            <!-- Injected dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- OFFICIAL SIGNATURE CD IELTS BOTTOM QUESTION TOOLBAR -->
+                <div class="cd-ielts-bottom-bar rounded-2xl p-3 px-4 flex flex-col lg:flex-row items-center justify-between gap-3 shadow-md">
+                    <!-- Left: Passage Switcher Tabs -->
+                    <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-semibold shrink-0">
+                        <button onclick="selectReadingPassage(0)" id="btn-passage-0" class="px-3 py-1.5 rounded-lg bg-white shadow-xs text-slate-900 font-bold transition-all">Passage 1 (1–13)</button>
+                        <button onclick="selectReadingPassage(1)" id="btn-passage-1" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition-all">Passage 2 (14–26)</button>
+                        <button onclick="selectReadingPassage(2)" id="btn-passage-2" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition-all">Passage 3 (27–40)</button>
+                    </div>
+
+                    <!-- Center: 40 Square CD IELTS Question Palette Buttons -->
+                    <div class="flex items-center gap-1 overflow-x-auto py-1 px-2 custom-scrollbar max-w-full lg:max-w-xl" id="reading-palette-container">
+                        <!-- Populated dynamically with 40 numbered buttons -->
+                    </div>
+
+                    <!-- Right: Review Flag, Back/Next Arrows & Submit Test -->
+                    <div class="flex items-center gap-2 shrink-0">
+                        <label class="flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 px-2.5 py-1.5 rounded-lg cursor-pointer transition-colors border border-slate-200" title="Flag current question for review">
+                            <input type="checkbox" id="reading-flag-toggle" onchange="toggleFlagCurrentQuestion()" class="text-amber-500 rounded focus:ring-amber-400">
+                            <span>⚑ Review</span>
+                        </label>
+                        <button type="button" onclick="prevReadingQuestion()" class="px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-100 transition-colors" title="Previous Question">
+                            ◄ Back
+                        </button>
+                        <button type="button" onclick="nextReadingQuestion()" class="px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-100 transition-colors" title="Next Question">
+                            Next ►
+                        </button>
+                        <button type="button" onclick="submitReadingTest()" class="px-4 py-1.5 rounded-lg bg-[#D91C29] text-white font-bold hover:bg-rose-700 shadow-md shadow-rose-900/20 transition-all text-xs flex items-center gap-1.5" title="Finish and grade reading test">
+                            <span>Submit Test</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================================= -->
+            <!-- 4. WRITING VIEW -->
+            <!-- ========================================================= -->
+            <div id="view-writing" class="hidden space-y-4">
+                <!-- OFFICIAL CD IELTS CANDIDATE HEADER STRIP (WRITING) -->
+                <div class="cd-ielts-exam-header rounded-2xl p-3.5 px-5 flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-md">
+                    <div class="flex flex-wrap items-center gap-3 text-xs">
+                        <div class="px-2 py-0.5 rounded bg-[#D91C29] text-white font-extrabold tracking-wider text-[11px]">
+                            IELTS ACADEMIC
+                        </div>
+                        <div class="text-slate-200">
+                            Candidate: <strong id="cd-writing-candidate-name" class="text-white font-bold">Alex Morgan</strong>
+                        </div>
+                        <div class="text-slate-400 hidden sm:inline">•</div>
+                        <div class="text-slate-300 hidden sm:inline">
+                            Candidate No.: <span id="cd-writing-candidate-id" class="font-mono text-slate-100 font-semibold">849201</span>
+                        </div>
+                        <div class="text-slate-400 hidden lg:inline">•</div>
+                        <div class="text-slate-300 hidden lg:inline">
+                            Module: <span class="font-medium text-amber-300">Writing (Tasks 1 & 2 • 60 Mins)</span>
+                        </div>
+                    </div>
+
+                    <!-- Center: CD IELTS Official Clock with Hide Toggle (Writing: 60:00 / 40:00) -->
+                    <div class="flex items-center gap-2 self-start md:self-auto">
+                        <div class="flex items-center gap-2 bg-slate-800/90 px-3 py-1 rounded-xl border border-slate-700">
+                            <span id="writing-timer-container" class="flex items-center gap-1.5 font-mono text-sm sm:text-base font-extrabold text-rose-300">
+                                <svg class="w-4 h-4 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <span id="writing-timer">40:00</span>
+                            </span>
+                            <button onclick="toggleClockVisibility('writing')" id="btn-toggle-writing-clock" class="text-[11px] px-2 py-0.5 rounded bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold transition-colors">
+                                Hide Clock
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right: Assigned Task Badge & Next Task Button -->
+                    <div class="flex flex-wrap items-center gap-2">
+                        <div class="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-950/80 border border-amber-700/60 text-xs font-mono font-bold text-amber-200" title="Assigned Official Cambridge Writing Task">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                            <span id="badge-writing-test-id">Exam Task: W-01</span>
+                        </div>
+                        <button onclick="loadRandomWritingTask()" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-amber-600 hover:bg-amber-500 text-white flex items-center gap-1 transition-colors shadow-xs" title="Generate Next Random Cambridge Writing Task">
+                            <span>🎲 Next Exam</span>
+                        </button>
+                        <span id="badge-writing-count" class="text-[11px] font-bold px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">120 Tasks</span>
+                        <button onclick="openModelAnswerModal()" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-amber-500/20 text-amber-300 border border-amber-400/30 hover:bg-amber-500/30 transition-colors">
+                            🌟 Band 9 Model
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Task Switcher & Prompt Card -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+                        <div class="flex items-center gap-2">
+                            <button id="btn-w-task1" onclick="switchWritingTaskType(1)" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors">
+                                Task 1: Visual Report (150 words)
+                            </button>
+                            <button id="btn-w-task2" onclick="switchWritingTaskType(2)" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-brand-50 text-brand-700 border border-brand-200 transition-colors">
+                                Task 2: Discursive Essay (250 words)
+                            </button>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs text-slate-400 font-medium">Exam Timer:</span>
+                            <span id="writing-countdown" class="px-3 py-1.5 rounded-lg bg-slate-100 font-mono text-xs font-bold text-slate-700 border border-slate-200">
+                                40:00
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Prompt Text -->
+                    <div class="mt-4">
+                        <h3 id="writing-prompt-title" class="font-extrabold text-slate-900 text-base mb-2">Automation and the Future of Employment</h3>
+                        <div id="writing-prompt-content" class="text-xs text-slate-700 bg-slate-50 p-4 rounded-xl border border-slate-200/80 leading-relaxed whitespace-pre-wrap">
+                            <!-- Prompt injected here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Essay Editor -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                    <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
+                        <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">Your Essay Submission</span>
+                        <div class="flex items-center gap-3">
+                            <span id="writing-word-counter" class="text-xs font-bold px-2.5 py-1 rounded-full bg-rose-50 text-rose-600 border border-rose-200">
+                                0 / 250 words
+                            </span>
+                        </div>
+                    </div>
+
+                    <textarea id="writing-textarea" oninput="updateWordCount()" rows="14" class="w-full p-4 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 font-serif text-sm leading-relaxed text-slate-800 placeholder-slate-400 custom-scrollbar" placeholder="Type your response here. Structure with an introduction, clear body paragraphs with topic sentences and evidence, and a cohesive conclusion..."></textarea>
+
+                    <div class="mt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <span class="text-xs text-slate-400">
+                            💡 Rigorous Gemini analysis across all 4 official IELTS criteria with line-by-line grammar corrections & vocabulary upgrades.
+                        </span>
+                        <button onclick="submitWritingEvaluation()" id="btn-submit-writing" class="px-6 py-2.5 rounded-xl bg-brand-600 text-white font-bold hover:bg-brand-700 shadow-md shadow-brand-500/20 transition-all flex items-center gap-2 self-end text-sm">
+                            <span id="writing-submit-label">Evaluate with Gemini Examiner</span>
+                            <div id="writing-spinner" class="hidden w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Gemini Writing Evaluation Report Container -->
+                <div id="writing-report-container" class="hidden space-y-5">
+                    <!-- Populated dynamically with official criteria, line-by-line corrections, and vocab upgrades -->
+                </div>
+            </div>
+
+            <!-- ========================================================= -->
+            <!-- 5. SPEAKING VIEW -->
+            <!-- ========================================================= -->
+            <div id="view-speaking" class="hidden space-y-4">
+                <!-- OFFICIAL CD IELTS CANDIDATE HEADER STRIP (SPEAKING) -->
+                <div class="cd-ielts-exam-header rounded-2xl p-3.5 px-5 flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-md">
+                    <div class="flex flex-wrap items-center gap-3 text-xs">
+                        <div class="px-2 py-0.5 rounded bg-[#D91C29] text-white font-extrabold tracking-wider text-[11px]">
+                            IELTS ACADEMIC
+                        </div>
+                        <div class="text-slate-200">
+                            Candidate: <strong id="cd-speaking-candidate-name" class="text-white font-bold">Alex Morgan</strong>
+                        </div>
+                        <div class="text-slate-400 hidden sm:inline">•</div>
+                        <div class="text-slate-300 hidden sm:inline">
+                            Candidate No.: <span id="cd-speaking-candidate-id" class="font-mono text-slate-100 font-semibold">849201</span>
+                        </div>
+                        <div class="text-slate-400 hidden lg:inline">•</div>
+                        <div class="text-slate-300 hidden lg:inline">
+                            Module: <span class="font-medium text-emerald-300">Speaking (Parts 1, 2 & 3 • 11–14 Mins)</span>
+                        </div>
+                    </div>
+
+                    <!-- Center: CD IELTS Official Clock with Hide Toggle (Speaking: 14:00) -->
+                    <div class="flex items-center gap-2 self-start md:self-auto">
+                        <div class="flex items-center gap-2 bg-slate-800/90 px-3 py-1 rounded-xl border border-slate-700">
+                            <span id="speaking-timer-container" class="flex items-center gap-1.5 font-mono text-sm sm:text-base font-extrabold text-rose-300">
+                                <svg class="w-4 h-4 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <span id="speaking-timer">14:00</span>
+                            </span>
+                            <button onclick="toggleClockVisibility('speaking')" id="btn-toggle-speaking-clock" class="text-[11px] px-2 py-0.5 rounded bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold transition-colors">
+                                Hide Clock
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right: Voice Selector, Assigned Interview Badge & Next Mock Controls -->
+                    <div class="flex flex-wrap items-center gap-2">
+                        <!-- Examiner Persona Selector -->
+                        <div class="flex items-center gap-1.5 bg-slate-800 px-2 py-0.5 rounded-lg border border-slate-700">
+                            <span class="text-[11px] text-slate-400 font-medium">Examiner:</span>
+                            <select id="select-speaking-persona" onchange="updateSpeakingPersonaSelection(this.value)" class="bg-transparent text-xs text-white font-semibold focus:outline-none cursor-pointer max-w-[200px] truncate" title="Select Speaking Examiner Persona">
+                                <optgroup label="🌟 Gemini AI Studio Neural Voices">
+                                    <option value="gemini:Puck" class="bg-slate-900 text-white" selected>👨‍🏫 Puck (Natural British)</option>
+                                    <option value="gemini:Aoede" class="bg-slate-900 text-white">👩‍🏫 Aoede (Expressive Academic)</option>
+                                    <option value="gemini:Charon" class="bg-slate-900 text-white">👨‍💼 Charon (Cambridge Senior)</option>
+                                    <option value="gemini:Kore" class="bg-slate-900 text-white">👩‍💼 Kore (Calm Professional)</option>
+                                    <option value="gemini:Fenrir" class="bg-slate-900 text-white">🎙️ Fenrir (Deep Resonant Male)</option>
+                                </optgroup>
+                                <optgroup label="🎙️ High-Def System Voices">
+                                    <option value="browser:auto" class="bg-slate-900 text-white">⚡ Auto-Select Best System Voice</option>
+                                </optgroup>
+                            </select>
+                            <button type="button" onclick="previewExaminerVoice()" class="ml-1 text-[11px] text-amber-300 hover:text-amber-200 font-bold" title="Test Voice">
+                                🔊
+                            </button>
+                        </div>
+
+                        <div class="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-950/80 border border-emerald-700/60 text-xs font-mono font-bold text-emerald-200" title="Assigned Official Cambridge Interview">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                            <span id="badge-speaking-test-id">Interview: S-01</span>
+                        </div>
+                        <button onclick="loadRandomSpeakingTest()" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white flex items-center gap-1 transition-colors shadow-xs" title="Generate Next Random Cambridge Speaking Mock">
+                            <span>🎲 Next Exam</span>
+                        </button>
+                        <span id="badge-speaking-count" class="text-[11px] font-bold px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">120 Sets</span>
+                    </div>
+                </div>
+
+                <!-- Speaking Simulator Header Card -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="px-2.5 py-0.5 text-xs font-bold rounded-full bg-emerald-100 text-emerald-700">Live Voice Examiner Simulation</span>
+                                <span class="px-2.5 py-0.5 text-xs font-bold rounded-full bg-slate-100 text-slate-700 border border-slate-200">🏛️ Cambridge Benchmark</span>
+                                <span class="text-xs text-slate-400">Parts 1, 2, and 3</span>
+                            </div>
+                            <h3 id="speaking-test-title" class="font-extrabold text-slate-900 text-base">Full Mock Speaking Test: Technology & Life Choices</h3>
+                        </div>
+                        <div id="speaking-countdown-badge" class="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-mono font-bold self-start sm:self-auto" title="Official 14-Minute CD IELTS Speaking Clock">
+                            <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span>⏱️ Interview Clock: <span id="speaking-sub-timer">14:00</span> remaining</span>
+                        </div>
+                    </div>
+
+                    <!-- Stage Tabs -->
+                    <div class="flex items-center justify-between pt-3 border-t border-slate-100">
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Interview Parts:</span>
+                        <div class="flex rounded-lg bg-slate-100 p-1 text-xs font-semibold">
+                            <button onclick="switchSpeakingPart(1)" id="btn-spk-part1" class="px-3 py-1 rounded-md bg-white shadow-sm text-slate-800">Part 1 (Intro)</button>
+                            <button onclick="switchSpeakingPart(2)" id="btn-spk-part2" class="px-3 py-1 rounded-md text-slate-600 hover:text-slate-900">Part 2 (Cue Card)</button>
+                            <button onclick="switchSpeakingPart(3)" id="btn-spk-part3" class="px-3 py-1 rounded-md text-slate-600 hover:text-slate-900">Part 3 (Discussion)</button>
+                        </div>
+                    </div>
+
+                    <!-- Part 1 & 3 Q&A Container -->
+                    <div id="speaking-qa-container" class="mt-6 space-y-6">
+                        <!-- Loaded dynamically -->
+                    </div>
+
+                    <!-- Part 2 Cue Card Container (Specific Layout) -->
+                    <div id="speaking-part2-container" class="hidden mt-6 space-y-5">
+                        <div class="bg-amber-50/80 border border-amber-200 rounded-xl p-5">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-bold text-amber-900 text-sm">Part 2 Cue Card Topic</span>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="playExaminerVoice(document.getElementById('cue-card-text').innerText, this)" class="px-2.5 py-1 text-xs font-medium rounded-lg bg-amber-100 text-amber-800 hover:bg-amber-200 flex items-center gap-1">
+                                        🔊 Read Cue Card
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="cue-card-text" class="text-xs text-slate-800 whitespace-pre-wrap leading-relaxed font-medium">
+                                Describe a difficult decision that you made recently that had a positive outcome.
+                            </div>
+                        </div>
+
+                        <!-- Timer Row: 1-Min Prep vs 2-Min Speaking -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between">
+                                <div>
+                                    <div class="text-xs font-bold text-slate-700">Preparation Time</div>
+                                    <div class="text-xs text-slate-500">1 minute to make structured notes</div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span id="timer-prep" class="font-mono font-bold text-base text-slate-800">01:00</span>
+                                    <button onclick="startPrepTimer()" id="btn-start-prep" class="px-3 py-1 text-xs font-semibold rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">Start Prep</button>
+                                </div>
+                            </div>
+
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between">
+                                <div>
+                                    <div class="text-xs font-bold text-slate-700">Speaking Long Turn</div>
+                                    <div class="text-xs text-slate-500">Aim for 1.5 - 2 minutes</div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span id="timer-speak" class="font-mono font-bold text-base text-emerald-600">02:00</span>
+                                    <button onclick="startSpeakingTimer()" id="btn-start-speak" class="px-3 py-1 text-xs font-semibold rounded-lg bg-emerald-600 text-white hover:bg-emerald-700">Start 2 Min</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cue Card Notes & Response -->
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <label class="text-xs font-bold text-slate-700">Your Spoken Response / Live Transcript:</label>
+                                <button onclick="toggleSpeechRecognition('part2-transcript')" id="btn-mic-part2" class="px-3 py-1 text-xs font-bold rounded-lg bg-rose-50 text-rose-600 border border-rose-200 hover:bg-rose-100 flex items-center gap-1.5">
+                                    <span>🎤 Speak into Microphone</span>
+                                </button>
+                            </div>
+                            <textarea id="part2-transcript" rows="6" class="w-full p-3.5 rounded-xl border border-slate-200 text-xs text-slate-800 leading-relaxed font-sans placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500" placeholder="Your speech will appear here as you speak, or you can type your answer..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Evaluation Trigger -->
+                    <div class="mt-8 pt-5 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <span class="text-xs text-slate-400">
+                            Gemini evaluates your speech for Fluency & Coherence, Lexical Resource, Grammar, and detects filler words.
+                        </span>
+                        <button onclick="submitSpeakingEvaluation()" id="btn-submit-speaking" class="px-6 py-2.5 rounded-xl bg-emerald-600 text-white font-bold hover:bg-emerald-700 shadow-md shadow-emerald-500/20 transition-all flex items-center gap-2 text-sm">
+                            <span id="speaking-submit-label">Evaluate Interview with Gemini AI</span>
+                            <div id="speaking-spinner" class="hidden w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Speaking Evaluation Report Container -->
+                <div id="speaking-report-container" class="hidden space-y-5">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <!-- ========================================================= -->
+            <!-- 6. VOCABULARY NOTEBOOK VIEW -->
+            <!-- ========================================================= -->
+            <div id="view-vocabulary" class="hidden space-y-6">
+                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+                        <div>
+                            <h3 class="font-bold text-slate-900 text-base">Band 8+ Academic Vocabulary & Collocations</h3>
+                            <p class="text-xs text-slate-500 mt-0.5">High-impact lexical upgrades captured during your Gemini evaluations</p>
+                        </div>
+                        <button onclick="openAddVocabModal()" class="px-4 py-2 text-xs font-bold rounded-xl bg-purple-600 text-white hover:bg-purple-700 transition-colors flex items-center gap-1.5 self-start sm:self-auto">
+                            <span>+ Add Collocation</span>
+                        </button>
+                    </div>
+
+                    <!-- Search & Filter bar -->
+                    <div class="mt-4 flex flex-col sm:flex-row items-center gap-3">
+                        <div class="relative flex-1 w-full">
+                            <svg class="w-4 h-4 absolute left-3 top-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            <input type="text" id="vocab-search" oninput="filterVocabulary()" placeholder="Search word, meaning, or collocation..." class="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        </div>
+                        <div class="flex items-center gap-2 w-full sm:w-auto">
+                            <select id="vocab-filter-module" onchange="filterVocabulary()" class="px-3 py-2 rounded-xl border border-slate-200 text-xs text-slate-700 focus:outline-none">
+                                <option value="all">All Modules</option>
+                                <option value="Writing">Writing</option>
+                                <option value="Speaking">Speaking</option>
+                                <option value="Reading">Reading</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Vocabulary Cards Grid -->
+                    <div id="vocab-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================================= -->
+            <!-- 7. SETTINGS & PROFILE VIEW -->
+            <!-- ========================================================= -->
+            <div id="view-settings" class="hidden space-y-6">
+                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm max-w-2xl">
+                    <h3 class="font-bold text-slate-900 text-base pb-3 border-b border-slate-100">
+                        Gemini AI Configuration & Target Settings
+                    </h3>
+
+                    <form id="settings-form" onsubmit="saveSettings(event)" class="mt-5 space-y-5">
+                        <!-- Candidate Account Profile -->
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3">
+                            <div class="flex items-center justify-between pb-2 border-b border-slate-200">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-800 uppercase tracking-wider">
+                                        👤 Candidate Account Profile
+                                    </label>
+                                    <p class="text-[11px] text-slate-500">
+                                        Manage your personalized candidate profile and target preferences.
+                                    </p>
+                                </div>
+                                <button type="button" onclick="handleLogout()" class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 transition-colors">
+                                    Sign Out
+                                </button>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-[11px] font-semibold text-slate-600 mb-1">Candidate Name</label>
+                                    <input type="text" id="set-user-name" placeholder="Candidate Name" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs bg-white focus:ring-2 focus:ring-brand-500 font-semibold">
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-semibold text-slate-600 mb-1">Email Address</label>
+                                    <input type="email" id="set-user-email" disabled class="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs bg-slate-100 text-slate-500 cursor-not-allowed">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Gemini API Key -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                                Google Gemini API Key
+                            </label>
+                            <div class="flex items-center gap-2">
+                                <input type="password" id="set-gemini-key" placeholder="AIzaSy..." class="flex-1 px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-brand-500">
+                                <button type="button" onclick="testGeminiConnection()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors">
+                                    Test Key
+                                </button>
+                            </div>
+                            <p class="text-[11px] text-slate-400 mt-1.5">
+                                Leave blank to run with the built-in intelligent heuristic examiner. Input your Gemini API Key to enable live deep AI examiner feedback!
+                            </p>
+                        </div>
+
+                        <!-- Gemini Model Selection -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                                Gemini Model
+                            </label>
+                            <select id="set-gemini-model" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500">
+                                <option value="gemini-3.8-flash" selected>Gemini 3.8 Flash (Recommended - Latest & High Performance)</option>
+                                <option value="gemini-3.8-pro">Gemini 3.8 Pro (Maximum Analytical Depth)</option>
+                                <option value="gemini-2.5-flash">Gemini 2.5 Flash</option>
+                                <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+                            </select>
+                        </div>
+
+                        <!-- Examiner Audio & Human Voice Engine Settings -->
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-800 uppercase tracking-wider">
+                                        🎙️ Human Examiner Voice & Audio Engine
+                                    </label>
+                                    <p class="text-[11px] text-slate-500">
+                                        Select authentic human studio speech vs. local natural voices.
+                                    </p>
+                                </div>
+                                <button type="button" onclick="previewExaminerVoice()" id="btn-settings-preview-voice" class="px-3 py-1.5 text-xs font-bold rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100 flex items-center gap-1.5 transition-colors shadow-sm">
+                                    <span>🔊 Test Voice</span>
+                                </button>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-[11px] font-semibold text-slate-600 mb-1">Synthesis Engine</label>
+                                    <select id="set-audio-engine" onchange="updateAudioEnginePreference(this.value)" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs bg-white focus:ring-2 focus:ring-indigo-500">
+                                        <option value="gemini" selected>🌟 Gemini AI Neural Voice (Studio Human)</option>
+                                        <option value="browser">🎙️ Browser High-Definition Natural Voice</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-semibold text-slate-600 mb-1">Gemini Examiner Persona</label>
+                                    <select id="set-gemini-persona" onchange="updateGeminiPersonaPreference(this.value)" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs bg-white focus:ring-2 focus:ring-indigo-500">
+                                        <option value="Puck" selected>👨‍🏫 Puck (Natural British - Recommended)</option>
+                                        <option value="Aoede">👩‍🏫 Aoede (Expressive Academic)</option>
+                                        <option value="Charon">👨‍💼 Charon (Cambridge Senior Examiner)</option>
+                                        <option value="Kore">👩‍💼 Kore (Calm & Professional)</option>
+                                        <option value="Fenrir">🏛️ Fenrir (Deep & Resonant)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-[11px] font-semibold text-slate-600 mb-1">Detected Local Natural Voice (Fallback)</label>
+                                <select id="set-browser-voice" onchange="updateBrowserVoicePreference(this.value)" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs bg-white focus:ring-2 focus:ring-indigo-500">
+                                    <option value="">Auto-Detect Best Natural Voice (Google / Siri / Enhanced)</option>
+                                </select>
+                                <p class="text-[10px] text-slate-400 mt-1">
+                                    Robotic legacy voices (Alex, Fred, Bells, Compact) are demoted. High-definition voices (Google UK/US, Siri, Enhanced) are ranked first.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Target Band Score Slider -->
+                        <div>
+                            <div class="flex items-center justify-between mb-1.5">
+                                <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Target Overall Band Score</label>
+                                <span id="set-target-band-val" class="text-base font-bold text-brand-600">7.5</span>
+                            </div>
+                            <input type="range" id="set-target-band" min="5.0" max="9.0" step="0.5" value="7.5" oninput="document.getElementById('set-target-band-val').innerText = this.value" class="w-full accent-brand-600">
+                            <div class="flex justify-between text-[10px] text-slate-400 font-medium px-1">
+                                <span>Band 5.0</span>
+                                <span>Band 6.0</span>
+                                <span>Band 7.0</span>
+                                <span>Band 8.0</span>
+                                <span>Band 9.0</span>
+                            </div>
+                        </div>
+
+                        <!-- Exam Type -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Exam Type</label>
+                                <select id="set-exam-type" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500">
+                                    <option value="Academic">Academic</option>
+                                    <option value="General Training">General Training</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Target Exam Date</label>
+                                <input type="date" id="set-exam-date" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            </div>
+                        </div>
+
+                        <!-- Save Button -->
+                        <div class="pt-3">
+                            <button type="submit" class="w-full py-3 rounded-xl bg-brand-600 text-white font-bold hover:bg-brand-700 shadow-md transition-all text-sm">
+                                Save Settings
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Practice History & Baseline Reset Card -->
+                <div class="bg-white rounded-2xl border border-rose-200/80 p-5 shadow-sm max-w-2xl">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <h4 class="font-bold text-rose-800 text-sm flex items-center gap-1.5">
+                                <span>⚠️</span> Reset Practice History & Score Baseline
+                            </h4>
+                            <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                                Want to start practice from scratch? This clears your test attempt history so your estimated band resets to <strong>"Not yet assessed"</strong>.
+                            </p>
+                        </div>
+                        <button type="button" onclick="confirmResetAttempts()" class="px-3.5 py-2 text-xs font-bold rounded-xl bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100 transition-colors shrink-0">
+                            Reset to "Not yet assessed"
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- MODAL: ADD VOCABULARY -->
+    <div id="modal-add-vocab" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
+            <h4 class="font-bold text-slate-900 text-base mb-4">Add Band 8+ Collocation to Notebook</h4>
+            <div class="space-y-3.5 text-xs">
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Word or Idiomatic Phrase</label>
+                    <input type="text" id="add-vocab-word" placeholder="e.g. exponential surge" class="w-full p-2.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Meaning / Definition</label>
+                    <input type="text" id="add-vocab-meaning" placeholder="e.g. A rapid, compounding increase" class="w-full p-2.5 rounded-lg border border-slate-200 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Example in IELTS Context</label>
+                    <textarea id="add-vocab-context" rows="2" placeholder="e.g. The sector witnessed an exponential surge in adoption rates." class="w-full p-2.5 rounded-lg border border-slate-200 focus:outline-none"></textarea>
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Module Source</label>
+                    <select id="add-vocab-module" class="w-full p-2.5 rounded-lg border border-slate-200 focus:outline-none">
+                        <option value="Writing">Writing Task 1 & 2</option>
+                        <option value="Speaking">Speaking</option>
+                        <option value="Reading">Reading</option>
+                        <option value="General">General Academic</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mt-5 flex items-center justify-end gap-2">
+                <button onclick="closeAddVocabModal()" class="px-4 py-2 text-xs font-semibold rounded-lg text-slate-600 hover:bg-slate-100">Cancel</button>
+                <button onclick="saveNewVocabulary()" class="px-4 py-2 text-xs font-bold rounded-lg bg-purple-600 text-white hover:bg-purple-700">Save Word</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: MODEL ANSWER -->
+    <div id="modal-model-answer" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-100 max-h-[85vh] flex flex-col">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+                <h4 class="font-bold text-slate-900 text-base">Band 9.0 Official Model Essay</h4>
+                <button onclick="closeModelAnswerModal()" class="text-slate-400 hover:text-slate-600 p-1">✕</button>
+            </div>
+            <div id="modal-model-answer-content" class="text-xs text-slate-700 leading-relaxed font-serif space-y-3 overflow-y-auto custom-scrollbar flex-1 whitespace-pre-wrap">
+                <!-- Injected dynamically -->
+            </div>
+            <div class="pt-4 border-t border-slate-100 flex justify-end">
+                <button onclick="closeModelAnswerModal()" class="px-4 py-2 text-xs font-bold rounded-lg bg-slate-900 text-white">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: CAMBRIDGE IELTS STANDARDS & FIDELITY AUDIT -->
+    <div id="modal-ielts-standards" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-3xl w-full p-6 shadow-2xl border border-slate-100 max-h-[90vh] flex flex-col">
+            <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm">
+                        ✓
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 text-base">Cambridge & IDP IELTS Exam Readiness Standards</h4>
+                        <p class="text-xs text-slate-500">100% Alignment with Official Cambridge IELTS Specifications (Books 1–19)</p>
+                    </div>
+                </div>
+                <button onclick="toggleIeltsStandardsModal(false)" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100">✕</button>
+            </div>
+
+            <div class="overflow-y-auto custom-scrollbar flex-1 space-y-5 text-xs text-slate-700 pr-1">
+                <!-- Overview Alert -->
+                <div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-950 flex items-start gap-3">
+                    <span class="text-base">🎯</span>
+                    <div>
+                        <strong class="font-bold text-emerald-900">Why You Will Not Face Anything Unexpected:</strong>
+                        <p class="mt-0.5 leading-relaxed text-[11px] text-emerald-900">
+                            Every question set on this platform is calibrated directly to standard Cambridge IELTS Books 1–19 specifications. Passages match the exact 2,200-word density, section audio contains authentic British/Australian distractors, and questions utilize the official 14 question formats with standard strictness.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 4 Modules Breakdown Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Reading -->
+                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-slate-900 text-xs flex items-center gap-1.5">
+                                <span>📖</span> Academic Reading Suite
+                            </span>
+                            <span class="px-2 py-0.5 rounded bg-sky-100 text-sky-700 font-bold text-[10px]">40 Questions • 60 Mins</span>
+                        </div>
+                        <ul class="space-y-1 text-[11px] text-slate-600 list-disc pl-4 leading-relaxed">
+                            <li><strong>3 Academic Passages (~2,200 words)</strong> scaled from descriptive (Passage 1) to analytical (Passage 3).</li>
+                            <li><strong>All Cambridge Question Formats</strong>: True/False/Not Given, Yes/No/Not Given, Matching Headings (i–viii), Matching Features, Multiple Choice, and Sentence & Summary Completion.</li>
+                            <li><strong>Authentic Raw-to-Band Scale</strong>: 39–40 = Band 9.0; 37–38 = Band 8.5; 35–36 = Band 8.0; 30–32 = Band 7.0; 23–26 = Band 6.0.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Listening -->
+                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-slate-900 text-xs flex items-center gap-1.5">
+                                <span>🎧</span> Listening Suite
+                            </span>
+                            <span class="px-2 py-0.5 rounded bg-indigo-100 text-indigo-700 font-bold text-[10px]">40 Questions • 4 Sections</span>
+                        </div>
+                        <ul class="space-y-1 text-[11px] text-slate-600 list-disc pl-4 leading-relaxed">
+                            <li><strong>Section 1</strong>: Social transactional dialog (forms, names, dates, phone numbers, prices).</li>
+                            <li><strong>Section 2</strong>: Public orientation monologue (facilities, walking circuits, rules).</li>
+                            <li><strong>Section 3</strong>: Academic tutorial & laboratory methodology discussion.</li>
+                            <li><strong>Section 4</strong>: Monologue university scientific lecture (lecture notes completion).</li>
+                            <li><strong>Cambridge Distractor Traps</strong>: Self-corrections and contradictory distractor phrasing (*"originally thought"*, *"however"*, *"instead"*).</li>
+                        </ul>
+                    </div>
+
+                    <!-- Writing -->
+                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-slate-900 text-xs flex items-center gap-1.5">
+                                <span>✍️</span> Writing Evaluation Lab
+                            </span>
+                            <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-700 font-bold text-[10px]">Task 1 & 2 • 60 Mins</span>
+                        </div>
+                        <ul class="space-y-1 text-[11px] text-slate-600 list-disc pl-4 leading-relaxed">
+                            <li><strong>Task 1 (150+ Words, 20 Mins)</strong>: Data report summarizing tables, charts, and trends.</li>
+                            <li><strong>Task 2 (250+ Words, 40 Mins)</strong>: Discursive essays (*"Discuss both views"*, *"To what extent do you agree"*, *"Do advantages outweigh disadvantages"*).</li>
+                            <li><strong>Official Cambridge 4-Criteria Rubric</strong>: Task Achievement, Coherence & Cohesion, Lexical Resource, Grammatical Range & Accuracy.</li>
+                            <li><strong>Band 9.0 Exemplars</strong>: Authentic model answers with advanced academic collocations.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Speaking -->
+                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-slate-900 text-xs flex items-center gap-1.5">
+                                <span>🗣️</span> Speaking Simulation
+                            </span>
+                            <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 font-bold text-[10px]">3 Parts • 11–14 Mins</span>
+                        </div>
+                        <ul class="space-y-1 text-[11px] text-slate-600 list-disc pl-4 leading-relaxed">
+                            <li><strong>Part 1 (4–5 Mins)</strong>: 4 familiar everyday topic questions.</li>
+                            <li><strong>Part 2 (3–4 Mins)</strong>: Cue Card with 1-min scratchpad notes timer + 2-min uninterrupted speech timer.</li>
+                            <li><strong>Part 3 (4–5 Mins)</strong>: Two-way academic discussion exploring abstract societal/ethical implications.</li>
+                            <li><strong>Live Human Voice Examiner</strong>: Natural British/Australian speech cadence with filler word tracking.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Strict Marking Rules -->
+                <div class="p-4 rounded-xl bg-slate-100/70 border border-slate-200">
+                    <h5 class="font-bold text-slate-900 text-xs mb-2">Cambridge Strictness Marking Protocols:</h5>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-[11px] text-slate-700">
+                        <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+                            <strong class="font-bold text-slate-900 block mb-1">1. TRUE vs NOT GIVEN</strong>
+                            Contradiction must be factually disproven to be FALSE. Unmentioned facts must be marked NOT GIVEN.
+                        </div>
+                        <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+                            <strong class="font-bold text-slate-900 block mb-1">2. Word Limit Violations</strong>
+                            Exceeding "NO MORE THAN TWO WORDS" results in immediate zero marks, exactly as enforced by Cambridge examiners.
+                        </div>
+                        <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+                            <strong class="font-bold text-slate-900 block mb-1">3. Spelling & Grammar</strong>
+                            Both UK and US standard spellings are accepted, but singular/plural precision must match the passage text.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+                <span class="text-[11px] text-slate-500 font-medium">✓ Calibrated against Cambridge Assessment English specifications</span>
+                <button onclick="toggleIeltsStandardsModal(false)" class="px-5 py-2 text-xs font-bold rounded-xl bg-slate-900 text-white hover:bg-slate-800 transition-colors shadow">
+                    Got it, Back to Practice
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================= -->
+    <!-- MULTIUSER AUTHENTICATION MODAL (Sign In & Register)           -->
+    <!-- ============================================================= -->
+    <div id="modal-auth" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden transform transition-all animate-in fade-in zoom-in duration-200">
+            <!-- Modal Header -->
+            <div class="p-6 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white relative">
+                <button onclick="closeAuthModal()" id="btn-close-auth-modal" class="absolute top-4 right-4 p-1.5 rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-colors" title="Close">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-500 to-indigo-500 flex items-center justify-center text-white font-bold shadow-md">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-extrabold text-white">IELTS Master</h3>
+                        <p class="text-xs text-indigo-300">Personal Practice & Band Score Tracker</p>
+                    </div>
+                </div>
+                <p class="text-xs text-slate-300 leading-relaxed mt-1">
+                    Sign in or create your candidate account to save your 4-module test scores, track score improvements, and get personal Gemini AI diagnostics.
+                </p>
+
+                <!-- Tabs: Sign In vs Create Account -->
+                <div class="flex bg-slate-800/80 p-1 rounded-xl text-xs font-bold mt-4 border border-slate-700">
+                    <button onclick="setAuthTab('signin')" id="tab-auth-signin" class="flex-1 py-2 rounded-lg bg-white text-slate-900 shadow-sm transition-all">
+                        Sign In
+                    </button>
+                    <button onclick="setAuthTab('register')" id="tab-auth-register" class="flex-1 py-2 rounded-lg text-slate-300 hover:text-white transition-all">
+                        Create Account
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-6 space-y-4">
+                <!-- Status & Error Alert -->
+                <div id="auth-alert" class="hidden p-3 rounded-xl text-xs font-semibold"></div>
+
+                <!-- SIGN IN FORM -->
+                <form id="form-signin" onsubmit="handleSignIn(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Email Address</label>
+                        <input type="email" id="signin-email" required placeholder="candidate@example.com" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Password</label>
+                        <input type="password" id="signin-password" required placeholder="••••••••" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500">
+                    </div>
+                    <button type="submit" id="btn-signin-submit" class="w-full py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs shadow-md shadow-brand-500/20 transition-all flex items-center justify-center gap-2">
+                        <span>Sign In to Workspace</span>
+                    </button>
+                </form>
+
+                <!-- REGISTER FORM -->
+                <form id="form-register" onsubmit="handleRegister(event)" class="space-y-3.5 hidden">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Full Name</label>
+                        <input type="text" id="reg-name" required placeholder="e.g. Sarah Jenkins" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Email Address</label>
+                        <input type="email" id="reg-email" required placeholder="sarah@example.com" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Password (min 6 characters)</label>
+                        <input type="password" id="reg-password" required minlength="6" placeholder="••••••••" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500">
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Target Band</label>
+                            <select id="reg-target-band" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-white font-semibold">
+                                <option value="6.0">Band 6.0</option>
+                                <option value="6.5">Band 6.5</option>
+                                <option value="7.0">Band 7.0</option>
+                                <option value="7.5" selected>Band 7.5</option>
+                                <option value="8.0">Band 8.0</option>
+                                <option value="8.5">Band 8.5</option>
+                                <option value="9.0">Band 9.0</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Exam Type</label>
+                            <select id="reg-exam-type" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-white font-semibold">
+                                <option value="Academic" selected>Academic</option>
+                                <option value="General">General Training</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" id="btn-register-submit" class="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md shadow-indigo-500/20 transition-all flex items-center justify-center gap-2">
+                        <span>Create Account & Start Practice</span>
+                    </button>
+                </form>
+
+                <!-- Divider & 1-Click Demo Login -->
+                <div class="pt-3 border-t border-slate-100 space-y-2">
+                    <div class="text-center text-[11px] text-slate-400 font-medium">Or test instantly with a demo account:</div>
+                    <button onclick="handleDemoLogin()" type="button" class="w-full py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors flex items-center justify-center gap-1.5 border border-slate-200">
+                        <span>🚀 1-Click Demo Candidate Login (Alex Morgan)</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- CANDIDATE PROFILE & CREDENTIALS DETAILS MODAL -->
+    <!-- ========================================================= -->
+    <div id="modal-candidate-profile" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-lg w-full shadow-2xl border border-slate-200 overflow-hidden transform transition-all animate-in fade-in zoom-in-95 duration-200">
+            <!-- Modal Header -->
+            <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 p-6 text-white relative">
+                <button onclick="closeCandidateProfileModal()" class="absolute top-4 right-4 p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-colors" title="Close Profile">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-widest bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Official Candidate Credentials</span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold text-slate-300 bg-white/10" id="prof-modal-exam-type">Academic</span>
+                </div>
+                <div class="flex items-center gap-4 mt-3">
+                    <div id="prof-modal-avatar" class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-rose-500 via-indigo-600 to-sky-500 text-white font-extrabold text-2xl flex items-center justify-center shadow-lg shadow-indigo-500/25 ring-4 ring-white/10">
+                        AM
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <h3 id="prof-modal-name" class="text-xl font-extrabold text-white tracking-tight truncate">Alex Morgan</h3>
+                        <p id="prof-modal-email" class="text-xs text-slate-300 truncate font-mono">alex.morgan@cambridge-prep.org</p>
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <span class="inline-flex items-center gap-1 text-[11px] font-mono font-bold text-amber-300 bg-amber-400/10 px-2 py-0.5 rounded-md border border-amber-400/20">
+                                <span>ID:</span>
+                                <span id="prof-modal-cand-id">849201</span>
+                            </span>
+                            <span class="text-[11px] text-emerald-400 font-semibold flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                Authenticated Candidate
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-6 space-y-5">
+                <!-- Scores & Metrics Snapshot -->
+                <div>
+                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2.5">Performance & Diagnostics Snapshot</h4>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center">
+                        <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200/80">
+                            <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Overall Band</div>
+                            <div id="prof-modal-overall-band" class="text-lg font-black text-rose-600 mt-0.5">Not yet assessed</div>
+                        </div>
+                        <div class="p-3 rounded-2xl bg-indigo-50/60 border border-indigo-100">
+                            <div class="text-[10px] font-bold text-indigo-700 uppercase tracking-wider">Target Band</div>
+                            <div id="prof-modal-target-band" class="text-lg font-black text-indigo-700 mt-0.5">Band 7.5</div>
+                        </div>
+                        <div class="p-3 rounded-2xl bg-emerald-50/60 border border-emerald-100">
+                            <div class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider">Prep Streak</div>
+                            <div id="prof-modal-streak" class="text-lg font-black text-emerald-700 mt-0.5">1 Day</div>
+                        </div>
+                        <div class="p-3 rounded-2xl bg-amber-50/60 border border-amber-100">
+                            <div class="text-[10px] font-bold text-amber-700 uppercase tracking-wider">Completed Tests</div>
+                            <div id="prof-modal-tests-count" class="text-lg font-black text-amber-700 mt-0.5">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4 Sub-skills Band Breakdown -->
+                <div>
+                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2.5">Sub-skills Band Scores</h4>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-200/70">
+                            <span class="font-medium text-slate-700 flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-indigo-500"></span> Listening
+                            </span>
+                            <span id="prof-modal-listening-band" class="font-bold text-slate-800">Not assessed</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-200/70">
+                            <span class="font-medium text-slate-700 flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-sky-500"></span> Reading
+                            </span>
+                            <span id="prof-modal-reading-band" class="font-bold text-slate-800">Not assessed</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-200/70">
+                            <span class="font-medium text-slate-700 flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-purple-500"></span> Writing
+                            </span>
+                            <span id="prof-modal-writing-band" class="font-bold text-slate-800">Not assessed</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-200/70">
+                            <span class="font-medium text-slate-700 flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-amber-500"></span> Speaking
+                            </span>
+                            <span id="prof-modal-speaking-band" class="font-bold text-slate-800">Not assessed</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Verification Notice -->
+                <div class="p-3 rounded-2xl bg-slate-100/70 border border-slate-200 flex items-start gap-2.5 text-[11px] text-slate-600">
+                    <svg class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                    <div>
+                        <span class="font-bold text-slate-800">Security Architecture Verified:</span>
+                        PBKDF2-HMAC-SHA256 password hashing with per-user salt, constant-time validation, 64-character bearer token authorization, and strict user data isolation.
+                    </div>
+                </div>
+
+                <!-- Action Controls: Settings, Switch Account, Logout -->
+                <div class="pt-2 border-t border-slate-100 flex flex-col sm:flex-row gap-2">
+                    <button onclick="goToSettingsFromProfile()" class="flex-1 py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors flex items-center justify-center gap-1.5">
+                        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        <span>Account Settings</span>
+                    </button>
+                    <button onclick="switchAccountFromProfile()" class="flex-1 py-2.5 px-3 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-xs transition-colors flex items-center justify-center gap-1.5 border border-indigo-200/60">
+                        <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                        <span>Switch Account</span>
+                    </button>
+                    <button onclick="logoutFromProfile()" class="py-2.5 px-4 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs transition-colors flex items-center justify-center gap-1.5 border border-rose-200">
+                        <svg class="w-4 h-4 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                        <span>Log Out</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modular Application Logic -->
+    <script src="js/state.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/timers.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/settings.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/catalog.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/listening.js"></script>
+    <script src="js/reading.js"></script>
+    <script src="js/writing.js"></script>
+    <script src="js/speaking.js"></script>
+    <script src="js/vocabulary.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

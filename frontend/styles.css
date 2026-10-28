@@ -1,0 +1,406 @@
+/* Custom Styling & Utilities for IELTS Master - Authentic CD IELTS & Modern Luxury UI */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-serif: 'Newsreader', Georgia, Cambria, "Times New Roman", serif;
+    --font-mono: 'JetBrains Mono', Menlo, Monaco, Consolas, monospace;
+
+    /* Official Cambridge / British Council Brand Signature */
+    --ielts-red: #D91C29;
+    --ielts-red-dark: #B5121F;
+    --ielts-red-light: #FEE2E2;
+    --ielts-navy: #0F172A;
+    --ielts-navy-surface: #1E293B;
+    --ielts-paper: #FCFAF7;
+
+    --brand-50: #EEF2FF;
+    --brand-100: #E0E7FF;
+    --brand-500: #6366F1;
+    --brand-600: #4F46E5;
+    --brand-700: #4338CA;
+    --brand-900: #312E81;
+}
+
+body {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    background-color: #F8FAFC;
+    color: #0F172A;
+}
+
+.font-sans { font-family: var(--font-sans) !important; }
+.font-serif { font-family: var(--font-serif) !important; }
+.font-mono { font-family: var(--font-mono) !important; }
+
+/* Authentic IELTS Brand Red */
+.bg-ielts-red { background-color: var(--ielts-red); }
+.text-ielts-red { color: var(--ielts-red); }
+.border-ielts-red { border-color: var(--ielts-red); }
+
+/* Luxury Elevated Cards */
+.card-lift {
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+}
+.card-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px -10px rgba(15, 23, 42, 0.08), 0 4px 12px -4px rgba(15, 23, 42, 0.04);
+}
+
+.card-interactive {
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-interactive:hover {
+    transform: translateY(-3px) scale(1.005);
+    box-shadow: 0 18px 36px -10px rgba(15, 23, 42, 0.12);
+}
+
+/* Glassmorphism accents */
+.glass-panel {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+.glass-dark {
+    background: rgba(15, 23, 42, 0.94);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+/* Subtle Shimmer & Glow */
+.glow-indigo {
+    box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.35);
+}
+.glow-emerald {
+    box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.35);
+}
+.glow-amber {
+    box-shadow: 0 0 25px -5px rgba(245, 158, 11, 0.35);
+}
+.glow-red {
+    box-shadow: 0 0 25px -5px rgba(217, 28, 41, 0.35);
+}
+
+/* Custom Scrollbars */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(241, 245, 249, 0.7);
+    border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #94A3B8;
+}
+
+/* ==========================================================================
+   OFFICIAL COMPUTER-DELIVERED IELTS (CD IELTS) SIGNATURE STYLING
+   ========================================================================== */
+
+/* Authentic CD IELTS Examination Header Strip */
+.cd-ielts-exam-header {
+    background: #0F172A;
+    color: #FFFFFF;
+    border-bottom: 2px solid #E2E8F0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Authentic CD IELTS Parchment Reading Paper */
+.cd-ielts-paper {
+    background-color: #FAF8F5;
+    border: 1px solid #E2E8F0;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+/* Official Paragraph Letter Badge: [ Paragraph A ] */
+.cd-paragraph-marker {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--font-sans);
+    font-weight: 800;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    background: #E2E8F0;
+    color: #1E293B;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    border: 1px solid #CBD5E1;
+}
+
+/* Official CD IELTS Bottom Question Palette Bar */
+.cd-ielts-bottom-bar {
+    background: #FFFFFF;
+    border-top: 2px solid #CBD5E1;
+    box-shadow: 0 -4px 16px rgba(15, 23, 42, 0.06);
+}
+
+/* Official CD IELTS Square Question Palette Button */
+.cd-palette-btn {
+    width: 32px;
+    height: 32px;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: all 0.15s ease-in-out;
+    border: 1px solid #94A3B8;
+    background: #FFFFFF;
+    color: #1E293B;
+    user-select: none;
+}
+.cd-palette-btn:hover {
+    background: #F1F5F9;
+    border-color: #475569;
+}
+/* Unanswered question: clean white with border */
+.cd-palette-btn.unanswered {
+    background: #FFFFFF;
+    border: 1px solid #94A3B8;
+    color: #334155;
+}
+/* Answered question: solid fill with indicator */
+.cd-palette-btn.answered {
+    background: #0F172A;
+    border-color: #0F172A;
+    color: #FFFFFF;
+}
+/* Currently selected active question */
+.cd-palette-btn.active-q {
+    outline: 2px solid #2563EB;
+    outline-offset: 1px;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
+}
+/* Flagged for Review: Dog-ear triangle or badge */
+.cd-palette-btn.flagged::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 8px 8px 0;
+    border-color: transparent #F59E0B transparent transparent;
+}
+/* Graded Correct / Incorrect states */
+.cd-palette-btn.graded-correct {
+    background: #10B981 !important;
+    border-color: #059669 !important;
+    color: #FFFFFF !important;
+}
+.cd-palette-btn.graded-incorrect {
+    background: #EF4444 !important;
+    border-color: #DC2626 !important;
+    color: #FFFFFF !important;
+}
+
+/* Reading Split Pane Responsiveness */
+@media (min-width: 1024px) {
+    .split-pane-container {
+        height: calc(100vh - 165px);
+        min-height: 640px;
+    }
+}
+@media (max-width: 1023px) {
+    .split-pane-container {
+        height: auto;
+        min-height: auto;
+    }
+}
+
+/* Reading Font Size Variations */
+.reading-text-sm {
+    font-size: 0.9375rem !important;
+    line-height: 1.8 !important;
+}
+.reading-text-base {
+    font-size: 1.0625rem !important;
+    line-height: 1.85 !important;
+}
+.reading-text-lg {
+    font-size: 1.25rem !important;
+    line-height: 1.95 !important;
+}
+
+/* Text Highlighting in Reading */
+.highlighted {
+    background-color: #FEF08A !important;
+    border-radius: 3px;
+    padding: 1px 3px;
+    box-shadow: 0 0 0 1px #FDE047;
+}
+
+/* Audio Waveform animation */
+@keyframes soundwave {
+    0%, 100% { height: 4px; }
+    50% { height: 22px; }
+}
+
+.soundwave-bar {
+    width: 3px;
+    background: linear-gradient(180deg, #818CF8 0%, #4F46E5 100%);
+    border-radius: 9999px;
+    animation: soundwave 1.2s ease-in-out infinite;
+}
+.soundwave-bar:nth-child(2) { animation-delay: 0.15s; }
+.soundwave-bar:nth-child(3) { animation-delay: 0.3s; }
+.soundwave-bar:nth-child(4) { animation-delay: 0.45s; }
+.soundwave-bar:nth-child(5) { animation-delay: 0.6s; }
+
+/* Pulse animation for active voice recording */
+@keyframes pulse-ring {
+    0% { transform: scale(0.96); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); }
+    70% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+    100% { transform: scale(0.96); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+.recording-pulse {
+    animation: pulse-ring 1.5s infinite;
+}
+
+/* Nav Tab Active Indicators */
+.nav-tab {
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.nav-tab.active {
+    background: #0F172A;
+    color: #FFFFFF;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+}
+.nav-tab.active svg {
+    color: #F8FAFC !important;
+}
+
+/* Mobile Drawer Transitions */
+#mobile-drawer {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s ease;
+}
+#mobile-drawer.drawer-open {
+    transform: translateX(0);
+    visibility: visible;
+}
+#mobile-drawer.drawer-closed {
+    transform: translateX(-100%);
+    visibility: hidden;
+}
+
+#mobile-backdrop {
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+#mobile-backdrop.backdrop-open {
+    opacity: 1;
+    visibility: visible;
+}
+#mobile-backdrop.backdrop-closed {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* Animated gradient background accent */
+.hero-gradient {
+    background: radial-gradient(circle at 10% 10%, rgba(217, 28, 41, 0.04) 0%, transparent 35%),
+                radial-gradient(circle at 90% 15%, rgba(37, 99, 235, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 50% 90%, rgba(99, 102, 241, 0.04) 0%, transparent 45%),
+                #F8FAFC;
+}
+
+/* Modern Dark Mode Styling */
+body.dark-mode, body.cd-theme-dark {
+    background-color: #0B0F17 !important;
+    background-image: none !important;
+    color: #F1F5F9 !important;
+}
+
+body.dark-mode .bg-white,
+body.cd-theme-dark .bg-white {
+    background-color: #111827 !important;
+    color: #F1F5F9 !important;
+    border-color: #1F2937 !important;
+}
+
+body.dark-mode aside,
+body.cd-theme-dark aside,
+body.dark-mode header,
+body.cd-theme-dark header {
+    background-color: #111827 !important;
+    color: #F1F5F9 !important;
+    border-color: #1F2937 !important;
+}
+
+body.dark-mode .cd-ielts-paper,
+body.cd-theme-dark .cd-ielts-paper {
+    background-color: #111827 !important;
+    color: #E2E8F0 !important;
+    border-color: #1F2937 !important;
+}
+
+body.dark-mode .bg-slate-50,
+body.dark-mode .bg-slate-100,
+body.cd-theme-dark .bg-slate-50,
+body.cd-theme-dark .bg-slate-100 {
+    background-color: #1E293B !important;
+    color: #CBD5E1 !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode .text-slate-800,
+body.dark-mode .text-slate-900,
+body.dark-mode .text-slate-700,
+body.cd-theme-dark .text-slate-800,
+body.cd-theme-dark .text-slate-900,
+body.cd-theme-dark .text-slate-700 {
+    color: #F8FAFC !important;
+}
+
+body.dark-mode .text-slate-500,
+body.dark-mode .text-slate-600,
+body.cd-theme-dark .text-slate-500,
+body.cd-theme-dark .text-slate-600 {
+    color: #94A3B8 !important;
+}
+
+body.dark-mode .border-slate-200,
+body.dark-mode .border-slate-100,
+body.cd-theme-dark .border-slate-200,
+body.cd-theme-dark .border-slate-100 {
+    border-color: #1F2937 !important;
+}
+
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select,
+body.cd-theme-dark input,
+body.cd-theme-dark textarea,
+body.cd-theme-dark select {
+    background-color: #0F172A !important;
+    color: #F8FAFC !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode .hero-gradient,
+body.cd-theme-dark .hero-gradient {
+    background: #0B0F17 !important;
+}
+
+
+/* Elegant Radio & Checkbox buttons */
+input[type="radio"]:checked, input[type="checkbox"]:checked {
+    accent-color: var(--ielts-red);
+}

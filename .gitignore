@@ -1,0 +1,32 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# SQLite Database & Storage (auto-generated on server startup via backend/seed_data.py)
+data/*.db
+data/*.sqlite
+data/*.sqlite3
+
+# Logs & temporary files
+*.log
+server.log
+
+# Environment & credentials
+.env
+.env.*
+*.key
+*.pem
+
+# OS & Editor generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace

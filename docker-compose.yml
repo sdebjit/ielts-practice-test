@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  ielts-master:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ielts-master-app
+    restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      # Persist SQLite database and candidate attempt history
+      - ./data:/app/data
+    environment:
+      - PORT=8080
+      - PYTHONUNBUFFERED=1
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

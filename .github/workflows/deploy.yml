@@ -1,0 +1,138 @@
+name: IELTS Master CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test-and-validate:
+    name: Code Validation & Integrity Checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Validate Python Syntax
+        run: |
+          echo "Compiling all backend Python files..."
+          python3 -m py_compile backend/*.py
+
+      - name: Verify Database Initialization & Test Bank Generation
+        run: |
+          python3 -c "
+          import sys
+          sys.path.append('backend')
+          from database import init_db
+          from seed_data import seed_tests
+          import sqlite3
+
+          init_db()
+          seed_tests()
+
+          conn = sqlite3.connect('data/ielts_prep.db')
+          c = conn.cursor()
+          c.execute('SELECT COUNT(*) FROM tests')
+          count = c.fetchone()[0]
+          print(f'✅ Successfully seeded and verified {count} Cambridge test sets!')
+          assert count >= 600, f'Expected at least 600 tests, found {count}'
+          conn.close()
+          "
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validate Frontend JavaScript Syntax
+        run: |
+          echo "Validating JavaScript syntax across modular frontend..."
+          for file in frontend/js/*.js frontend/app.js; do
+            echo -n "Checking $file: "
+            node -c "$file" && echo "OK"
+          done
+
+  deploy:
+    name: Deploy to Oracle Cloud Production
+    needs: test-and-validate
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    env:
+      SERVER_IP: ${{ secrets.SERVER_IP || '152.67.166.102' }}
+      SERVER_USER: ${{ secrets.SERVER_USER || 'ubuntu' }}
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Configure SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "$SERVER_IP" >> ~/.ssh/known_hosts
+
+      - name: Sync Application Files to Remote VM
+        run: |
+          echo "Syncing application code to ${SERVER_USER}@${SERVER_IP}:/tmp/ielts-deploy/..."
+          rsync -avz --delete \
+            --exclude '.git' \
+            --exclude '.github' \
+            --exclude '__pycache__' \
+            --exclude '*.pyc' \
+            --exclude 'server.log' \
+            --exclude 'data/*.db' \
+            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
+            ./ "${SERVER_USER}@${SERVER_IP}:/tmp/ielts-deploy/"
+
+      - name: Apply Updates & Restart Services on Server
+        run: |
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no "${SERVER_USER}@${SERVER_IP}" << 'EOF'
+            set -e
+            echo "--> Applying code updates to /opt/ielts-gemini-prep..."
+            sudo cp -r /tmp/ielts-deploy/* /opt/ielts-gemini-prep/
+            sudo rm -rf /tmp/ielts-deploy
+
+            echo "--> Ensuring file permissions..."
+            sudo chown -R ubuntu:ubuntu /opt/ielts-gemini-prep
+            sudo chmod -R 775 /opt/ielts-gemini-prep/data
+
+            echo "--> Reloading Nginx configuration if updated..."
+            if [ -f /opt/ielts-gemini-prep/nginx/ielts-master.conf ]; then
+              sudo cp /opt/ielts-gemini-prep/nginx/ielts-master.conf /etc/nginx/sites-available/ielts-master.conf
+              sudo ln -sf /etc/nginx/sites-available/ielts-master.conf /etc/nginx/sites-enabled/ielts-master.conf
+              sudo nginx -t && sudo systemctl reload nginx
+            fi
+
+            echo "--> Restarting IELTS Master daemon..."
+            sudo systemctl daemon-reload
+            sudo systemctl restart ielts-master
+
+            sleep 3
+            if sudo systemctl is-active --quiet ielts-master; then
+              echo "✅ ielts-master service is running and active!"
+            else
+              echo "❌ ielts-master service failed to start!"
+              sudo journalctl -u ielts-master -n 30 --no-pager
+              exit 1
+            fi
+          EOF
+
+      - name: Verify Live Production Health
+        run: |
+          echo "Performing live endpoint verification..."
+          sleep 2
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "https://9843a666.nip.io/api/tests/random?module=reading")
+          echo "Health check HTTP status: $HTTP_STATUS"
+          if [ "$HTTP_STATUS" -eq 200 ]; then
+            echo "✅ Production deployment successful and verified live at https://9843a666.nip.io"
+          else
+            echo "⚠️ Health check returned status $HTTP_STATUS, retrying direct port 8080..."
+            curl -f "http://${SERVER_IP}:8080/api/tests/random?module=reading"
+          fi
