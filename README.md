@@ -1,113 +1,145 @@
-# IELTS Master: Full-Stack Practice & Improvement Tracker (Gemini AI Powered)
+# IELTS Master: Full-Stack Practice & Improvement Platform
 
-A full-stack IELTS preparation platform tailored to systematically improve your scores across all 4 segments: **LISTENING**, **READING**, **WRITING**, and **SPEAKING**.
+[![IELTS Master CI/CD Pipeline](https://github.com/sdebjit/ielts-practice-test/actions/workflows/deploy.yml/badge.svg)](https://github.com/sdebjit/ielts-practice-test/actions/workflows/deploy.yml)
+[![Live Production Deployment](https://img.shields.io/badge/Production-Live%20HTTPS-emerald.svg)](https://9843a666.nip.io)
+[![Python Version](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12-blue.svg)](https://python.org)
+[![Zero External Dependencies](https://img.shields.io/badge/Dependencies-Zero%20External%20Pip-success.svg)](https://github.com/sdebjit/ielts-practice-test)
 
-Instead of unstructured chat, this application provides an authentic examination environment, automated official IELTS 9-band rubric assessments, granular weakness diagnostics, progress trendlines, and Gemini AI-driven coaching.
+A full-stack, production-grade IELTS preparation platform tailored to systematically improve your scores across all 4 segments: **LISTENING**, **READING**, **WRITING**, and **SPEAKING**.
 
----
-
-## 🌟 Key Features Across All 4 Segments
-
-### 1. 🎧 Listening Simulation
-- **Authentic 4-Part Structure**: Section 1 (Everyday social dialogue), Section 2 (Public monologue/orientation), Section 3 (Academic consultation/tutorial), and Section 4 (Academic lecture).
-- **Interactive Audio Simulator**: Built-in voice player using Web Speech Synthesis, variable playback speed (`0.85x`, `1.0x`, `1.2x`), audio wave visualizer, and collapsible transcript toggle.
-- **Auto-Grading & Analysis**: Instant grading against official Cambridge band conversion tables (out of 40 raw score to Band 0–9).
-- **Distractor Analysis**: Detailed explanations explaining *why* an answer is correct and where the speaker distractors were.
-
-### 2. 📖 Academic Reading (Split-Screen Interface)
-- **Authentic Reading Passages**: High-difficulty descriptive and scientific texts (Passage 1 & Passage 2).
-- **Split-Screen UX**: Passage on the left with interactive **Text Highlighter** and font size scaling (`A-` / `A+`); questions on the right.
-- **Standard Question Formats**: True/False/Not Given, Matching Headings, Summary Completion, and Multiple Choice.
-- **60-Minute Exam Countdown Timer**: Accustoms you to real test pacing pressure.
-
-### 3. ✍️ Writing Task 1 & Task 2 Evaluator (Gemini AI Examiner)
-- **Task 1 (Academic)**: Data reports with tables/charts and 150-word minimum threshold.
-- **Task 2 (Discursive Essay)**: Complex social/technological essays with 250-word minimum threshold.
-- **Real-Time Word Counter**: Color-coded feedback ensuring you never fall short of minimum word count penalties.
-- **Examiner Evaluation Report (Gemini AI)**:
-  - Estimated Band Score (0.0 to 9.0 in 0.5 increments).
-  - Breakdown across the 4 official IELTS criteria:
-    1. *Task Achievement / Task Response*
-    2. *Coherence and Cohesion*
-    3. *Lexical Resource*
-    4. *Grammatical Range and Accuracy*
-  - **Line-by-Line Corrections**: Pinpoints exact sentences, native Band 8+ rewrites, and grammatical rationales.
-  - **Band 8+ Lexical Upgrades**: Replaces repetitive or elementary vocabulary with academic collocations and provides a 1-click button to save them to your notebook.
-  - **Band 9 Model Answers**: Complete model essays for comparison.
-
-### 4. 🗣️ Speaking Mock Interview (Live Examiner Simulation)
-- **Full 3-Part Test**:
-  - *Part 1*: Warm-up questions on occupation, routines, and leisure.
-  - *Part 2*: Cue Card with 1-minute prep timer and 2-minute speaking countdown.
-  - *Part 3*: In-depth abstract two-way discussion questions.
-- **Live Voice Examiner**: Uses browser voice synthesis to ask questions aloud just like a Cambridge/IDP examiner.
-- **Voice Transcription**: Speak directly into your microphone (Web Speech API) or type your responses.
-- **Examiner Evaluation Report (Gemini AI)**:
-  - 4 Criteria: *Fluency & Coherence*, *Lexical Resource*, *Grammatical Range & Accuracy*, *Pronunciation*.
-  - **Filler Word Detection**: Analyzes hesitations (e.g. *“um”*, *“like”*, *“you know”*).
-  - **PREP Framework Expansion Advice**: Teaches how to formulate structured 4-sentence answers (*Point, Reason, Example, Point*).
-  - **Native Conversational Expressions**: Suggestions to elevate everyday idioms to natural Band 8+ register.
+**Live Production URL:** [https://9843a666.nip.io](https://9843a666.nip.io)
 
 ---
 
-## 📊 Diagnostic Engine: "What Things You Need to Improve"
+## 🌟 Key Features
 
-The dashboard does not just give a number; it diagnoses your specific bottlenecks:
-- **Official IELTS Overall Band Score**: Automatically averages your 4 modules using the official IELTS rounding formula (rounding up from .25 to .5, and .75 to the next whole band).
-- **Segment Diagnostic Radar**:
-  - *Listening*: Identifies whether Multiple Choice distractors or Form Completion spellings are pulling your score down.
-  - *Reading*: Differentiates between *False* (contradiction) and *Not Given* (absence of evidence) mistakes.
-  - *Writing*: Highlights your lowest scoring criterion (e.g., Lexical Resource vs Grammar Range).
-  - *Speaking*: Analyzes fluency pauses and provides targeted speaking drills.
-- **Personalized 3-Step Action Roadmap**: Automatically generates high-priority drills based on historical performance.
-- **Interactive Visualizations**: Radar chart comparing your current balance vs your target band, plus score trendlines over time.
-- **Study Activity Streak & Exam Countdown**: Tracks consecutive study days and time spent.
+### 1. 📚 600 Authentic Cambridge Test Bank (Academic & General Training)
+* **Listening (120 Tests)**: Shared across both Academic and General Training. Full 4-part structure with Web Speech audio simulation, wave visualizers, variable playback speeds (`0.85x` to `1.2x`), and distractor analysis.
+* **Academic Reading (120 Tests, `R-01` to `R-120`)**:
+  * 3 long academic texts (~2,700 words per test).
+  * Split-screen interface with text highlighter, font scaling, and 60-minute exam timer.
+  * Standard Cambridge questions: True/False/Not Given, Matching Headings, Summary Completion, Multiple Choice.
+* **General Training Reading (60 Tests, `GTR-01` to `GTR-60`)**:
+  * **Section 1 (Q1–14)**: Everyday social notices, course guides, and timetables.
+  * **Section 2 (Q15–27)**: Workplace contexts, company policies, health & safety handbooks.
+  * **Section 3 (Q28–40)**: General interest long-form reading articles.
+  * Dedicated official GT raw-to-band scoring conversion (e.g. 30/40 is Band 6.5 in GT vs Band 7.0 in Academic).
+* **Academic Writing (120 Tasks, `W-01` to `W-120`)**:
+  * **Task 1**: Data reports, charts, tables, diagrams (150-word minimum).
+  * **Task 2**: Discursive essays with thesis and counterarguments (250-word minimum).
+* **General Training Writing (60 Tasks, `GTW-01` to `GTW-60`)**:
+  * **Task 1: Letter Writing**: Formal letters (complaints, petitions), semi-formal letters (landlords, managers), and informal letters (friends, colleagues). Evaluates salutation, tone/register, and 3-bullet coverage.
+  * **Task 2: Discursive Essay**: General training discursive topics with Band 9 model answers.
+* **Speaking Mock Interview (120 Tests)**:
+  * Full 3-part guided simulation: Part 1 interview, Part 2 cue card with prep countdown, Part 3 abstract discussion.
+  * Interactive examiner voice synthesis and speech recognition transcription.
 
----
+### 2. 🤖 Gemini AI Examiner Evaluation
+* Rigorous assessment against official 9-band descriptors:
+  1. *Task Achievement / Task Response*
+  2. *Coherence & Cohesion*
+  3. *Lexical Resource*
+  4. *Grammatical Range & Accuracy*
+* Detailed line-by-line grammar corrections and Band 8+ vocabulary upgrade recommendations with 1-click notebook saving.
 
-## 🚀 Quick Start Guide
-
-### 1. Launch the Application
-Run the startup script in terminal:
-```bash
-cd /Users/sadhukhandebjit/.gemini/antigravity/scratch/ielts-gemini-prep
-./start.sh 8080
-```
-Open your browser and navigate to:
-```
-http://localhost:8080
-```
-
-### 2. Configure Your Gemini AI Key (Optional but Recommended)
-1. Go to the **Settings** tab in the sidebar.
-2. Enter your **Google Gemini API Key** and select **Gemini 3.8 Flash** (or **Gemini 3.8 Pro**).
-3. Click **Test Key** to verify connectivity, then click **Save Settings**.
-*(Note: If no API key is provided, the platform automatically switches to its built-in Intelligent Heuristic Examiner, ensuring full offline functionality!)*
-
-### 3. Recommended Active Workspace
-To open this project directly in your IDE workspace, set the workspace directory to:
-```
-/Users/sadhukhandebjit/.gemini/antigravity/scratch/ielts-gemini-prep
-```
+### 3. 🌓 Modern UI & Candidate Features
+* **Simplistic Dark/Light Mode**: Single-click header toggle persisted across candidate sessions.
+* **Multi-User Authentication**: PBKDF2-HMAC-SHA256 password hashing with per-user salt and isolated score progress tracking.
+* **Diagnostic Radar & Progress Analytics**: Identifies whether distractors, True/False vs Not Given, or grammar range are pulling down scores.
 
 ---
 
-## 📁 Project Architecture
+## 🏗️ Architecture & Modular Codebase
 
 ```
-ielts-gemini-prep/
+ielts-practice-test/
+├── .github/
+│   └── workflows/
+│       └── deploy.yml          # Automated CI/CD pipeline (Test, Lint, Deploy)
 ├── backend/
-│   ├── server.py          # Python HTTP server & REST API (zero external dependencies)
-│   ├── database.py        # SQLite storage (settings, tests, attempts, vocabulary, study logs)
-│   ├── analytics.py       # Diagnostic engine, official IELTS rounding, weakness detector
-│   ├── gemini_service.py  # Google Gemini REST client & intelligent fallback evaluator
-│   └── seed_data.py       # Authentic IELTS practice tests, questions, and model answers
+│   ├── server.py               # Standalone Python HTTP server & REST API
+│   ├── database.py             # SQLite storage, auth, sessions, attempts, test bank
+│   ├── analytics.py            # Diagnostic engine, official IELTS band rounding
+│   ├── gemini_service.py       # Google Gemini REST client & heuristic examiner
+│   ├── seed_data.py            # Test bank orchestrator & auto-seeding engine
+│   ├── cambridge_listening_bank.py
+│   ├── cambridge_reading_bank.py
+│   ├── cambridge_writing_bank.py
+│   ├── cambridge_speaking_bank.py
+│   └── cambridge_gt_bank.py    # Dedicated 120 General Training test bank
 ├── frontend/
-│   ├── index.html         # Responsive SPA layout with Tailwind CSS & Chart.js
-│   ├── app.js             # Client state, Web Speech audio & recognition, interactive timers
-│   └── styles.css         # Custom animations, audio visualizer, split-screen layout
-├── data/
-│   └── ielts_prep.db      # SQLite local database file
-├── start.sh               # Quick launch script
-└── README.md              # Documentation
+│   ├── index.html              # Responsive single-page application
+│   ├── styles.css              # Custom styling, animations, and dark mode
+│   ├── app.js                  # Consolidated distribution script
+│   └── js/                     # Modular frontend scripts
+│       ├── state.js            # Reactive application state
+│       ├── utils.js            # Helpers and theme toggle logic
+│       ├── timers.js           # Independent countdown timers
+│       ├── auth.js             # Authentication, session, modal handlers
+│       ├── settings.js         # Settings & exam syllabus toggles
+│       ├── dashboard.js        # Analytics charts & diagnostic radar
+│       ├── catalog.js          # Test catalog & randomized exam pickers
+│       ├── audio.js            # Speech synthesis & audio visualizers
+│       ├── listening.js        # Listening exam simulator
+│       ├── reading.js          # Split-screen reading test & highlighter
+│       ├── writing.js          # Writing editor, word count & AI evaluation
+│       ├── speaking.js         # Speaking live interview simulator
+│       ├── vocabulary.js       # Academic vocabulary notebook
+│       └── app.js              # View router and bootstrap orchestrator
+├── nginx/
+│   └── ielts-master.conf       # Reverse proxy with Let's Encrypt SSL configuration
+├── systemd/
+│   └── ielts-master.service    # Production daemon service file
+├── deploy_oracle.sh            # Automated VM provisioner & firewall configuration
+└── README.md
 ```
+
+---
+
+## 🚀 CI/CD Pipeline & Deployment
+
+This repository uses **GitHub Actions** for continuous integration and automated deployment directly to the Oracle Cloud production VM whenever code is merged into `main`:
+
+```mermaid
+flowchart LR
+    A["Developer Commit"] --> B["Create Pull Request"]
+    B --> C["Code Validation & Tests"]
+    C --> D["Merge to main"]
+    D --> E["GitHub Actions CI/CD"]
+    E --> F["Deploy to Oracle VM (152.67.166.102)"]
+    F --> G["Live Site (https://9843a666.nip.io)"]
+```
+
+### GitHub Actions Secrets
+The following secrets are configured under **Settings > Secrets and variables > Actions**:
+* `SSH_PRIVATE_KEY`: Private SSH key for Oracle Cloud VM authentication.
+* `SERVER_IP`: Production server IP (`152.67.166.102`).
+* `SERVER_USER`: Service user (`ubuntu`).
+
+---
+
+## 🔄 Pull Request & Contribution Workflow
+
+All new features, improvements, and bug fixes must follow the PR workflow:
+
+1. **Create a Feature Branch**:
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+2. **Make and Test Changes Locally**:
+   ```bash
+   python3 -m py_compile backend/*.py
+   ./start.sh 8080
+   ```
+3. **Commit & Push to GitHub**:
+   ```bash
+   git add .
+   git commit -m "feat: description of changes"
+   git push -u origin feature/your-feature-name
+   ```
+4. **Open a Detailed Pull Request**:
+   ```bash
+   gh pr create --title "feat: your feature title" --body "Detailed summary of changes"
+   ```
+5. **Merge to `main`**:
+   Once the PR validation checks pass, merge the PR into `main`. The CI/CD pipeline will automatically deploy the latest changes to production.
