@@ -355,27 +355,31 @@ def get_all_tests(module=None, exam_type=None):
     conn.close()
     return [dict(r) for r in rows]
 
-def get_random_test(module=None, exam_type=None):
+def get_random_test(module=None, exam_type=None, exclude_id=None):
     conn = get_connection()
+    clauses = []
+    params = []
     if module:
+        clauses.append("lower(module) = lower(?)")
+        params.append(module)
         if exam_type and module.lower() in ('reading', 'writing'):
-            row = conn.execute(
-                'SELECT * FROM tests WHERE lower(module) = lower(?) AND lower(type) = lower(?) ORDER BY RANDOM() LIMIT 1',
-                (module, exam_type)
-            ).fetchone()
-        else:
-            row = conn.execute(
-                'SELECT * FROM tests WHERE lower(module) = lower(?) ORDER BY RANDOM() LIMIT 1',
-                (module,)
-            ).fetchone()
+            clauses.append("lower(type) = lower(?)")
+            params.append(exam_type)
     else:
         if exam_type:
-            row = conn.execute(
-                'SELECT * FROM tests WHERE (lower(type) = lower(?) AND lower(module) IN ("reading", "writing")) OR lower(module) IN ("listening", "speaking") ORDER BY RANDOM() LIMIT 1',
-                (exam_type,)
-            ).fetchone()
-        else:
-            row = conn.execute('SELECT * FROM tests ORDER BY RANDOM() LIMIT 1').fetchone()
+            clauses.append("((lower(type) = lower(?) AND lower(module) IN ('reading', 'writing')) OR lower(module) IN ('listening', 'speaking'))")
+            params.append(exam_type)
+
+    where_sql = (" WHERE " + " AND ".join(clauses)) if clauses else ""
+
+    row = None
+    if exclude_id:
+        ex_where = (where_sql + " AND id != ?" if where_sql else " WHERE id != ?")
+        row = conn.execute(f"SELECT * FROM tests {ex_where} ORDER BY RANDOM() LIMIT 1", params + [exclude_id]).fetchone()
+
+    if not row:
+        row = conn.execute(f"SELECT * FROM tests {where_sql} ORDER BY RANDOM() LIMIT 1", params).fetchone()
+
     conn.close()
     if row:
         d = dict(row)

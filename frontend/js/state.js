@@ -98,3 +98,13 @@ let speakingTimeLeftSec = 840; // 14:00 mins overall mock window
 
 // Vocabulary State
 let vocabularyList = [];
+
+// Exit Exam Session & Exclusion Tracking
+let pendingExitTargetView = null;
+let pendingExitModule = null;
+const lastExitedTestId = {
+    reading: null,
+    listening: null,
+    writing: null,
+    speaking: null
+};

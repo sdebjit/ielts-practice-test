@@ -319,11 +319,12 @@ class IELTSRequestHandler(http.server.BaseHTTPRequestHandler):
         elif path == '/api/tests/random':
             module = query.get('module', [None])[0]
             exam_type = query.get('type', [None])[0]
+            exclude = query.get('exclude', [None])[0]
             if not exam_type:
                 user = self.get_current_user()
                 if user:
                     exam_type = user.get('exam_type')
-            t = get_random_test(module, exam_type)
+            t = get_random_test(module, exam_type, exclude_id=exclude)
             if t:
                 self.send_json(t)
             else:
