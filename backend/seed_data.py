@@ -776,10 +776,13 @@ def seed_tests():
                     json.dumps(t['content'])
                 ))
 
-    # Check if General Training tests are populated
+    # Check if General Training tests are populated with the updated multi-suite bank
     cursor.execute("SELECT COUNT(*) FROM tests WHERE lower(type) = 'general training'")
     gt_test_count = cursor.fetchone()[0]
-    if gt_test_count < 120:
+    cursor.execute("SELECT content FROM tests WHERE id = 'GTR-02'")
+    gtr02_row = cursor.fetchone()
+    needs_gt_seed = (gt_test_count < 120) or (gtr02_row is None) or ('Westbridge' in gtr02_row[0])
+    if needs_gt_seed:
         try:
             from cambridge_gt_bank import seed_cambridge_gt_bank
             conn.close()

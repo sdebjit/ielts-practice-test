@@ -3,7 +3,98 @@
  * Coordinates view switching, timer lifecycle between tabs, and bootstrap initialization.
  */
 
-function switchView(viewName) {
+function getActiveTestRunningModule() {
+    const viewListening = document.getElementById('view-listening');
+    if (viewListening && !viewListening.classList.contains('hidden') && currentListeningTest && !currentListeningResults) {
+        return 'listening';
+    }
+    const viewReading = document.getElementById('view-reading');
+    if (viewReading && !viewReading.classList.contains('hidden') && currentReadingTest && !currentReadingResults) {
+        return 'reading';
+    }
+    const viewWriting = document.getElementById('view-writing');
+    if (viewWriting && !viewWriting.classList.contains('hidden') && currentWritingTask) {
+        return 'writing';
+    }
+    const viewSpeaking = document.getElementById('view-speaking');
+    if (viewSpeaking && !viewSpeaking.classList.contains('hidden') && currentSpeakingTest) {
+        return 'speaking';
+    }
+    return null;
+}
+
+function requestExitActiveTest(moduleName = null) {
+    pendingExitModule = moduleName || getActiveTestRunningModule();
+    pendingExitTargetView = 'dashboard';
+    const modal = document.getElementById('modal-exit-test');
+    if (modal) modal.classList.remove('hidden');
+}
+
+function cancelExitActiveTest() {
+    pendingExitTargetView = null;
+    pendingExitModule = null;
+    const modal = document.getElementById('modal-exit-test');
+    if (modal) modal.classList.add('hidden');
+}
+
+function confirmExitActiveTest() {
+    const modal = document.getElementById('modal-exit-test');
+    if (modal) modal.classList.add('hidden');
+
+    const mod = pendingExitModule || getActiveTestRunningModule();
+    if (mod === 'reading') {
+        if (currentReadingTest) lastExitedTestId.reading = currentReadingTest.id;
+        currentReadingTest = null;
+        currentReadingResults = null;
+        if (typeof resetReadingTimer === 'function') resetReadingTimer();
+        const sheet = document.getElementById('reading-answer-sheet');
+        if (sheet) sheet.innerHTML = '';
+        const passageTextEl = document.getElementById('reading-passage-text');
+        if (passageTextEl) passageTextEl.innerHTML = '';
+        const passageTitleEl = document.getElementById('reading-passage-title');
+        if (passageTitleEl) passageTitleEl.innerText = '';
+    } else if (mod === 'listening') {
+        if (currentListeningTest) lastExitedTestId.listening = currentListeningTest.id;
+        currentListeningTest = null;
+        currentListeningResults = null;
+        if (typeof resetListeningTimer === 'function') resetListeningTimer();
+        if (typeof stopAnyActiveAudio === 'function') stopAnyActiveAudio();
+        const sheet = document.getElementById('listening-answer-sheet');
+        if (sheet) sheet.innerHTML = '';
+    } else if (mod === 'writing') {
+        if (currentWritingTask) lastExitedTestId.writing = currentWritingTask.id;
+        currentWritingTask = null;
+        if (typeof resetWritingTimer === 'function') resetWritingTimer();
+        const textInput = document.getElementById('writing-input');
+        if (textInput) textInput.value = '';
+    } else if (mod === 'speaking') {
+        if (currentSpeakingTest) lastExitedTestId.speaking = currentSpeakingTest.id;
+        currentSpeakingTest = null;
+        if (typeof resetOverallSpeakingTimer === 'function') resetOverallSpeakingTimer();
+        if (typeof stopSpeechRecognition === 'function') stopSpeechRecognition();
+    }
+
+    const targetView = pendingExitTargetView || 'dashboard';
+    pendingExitTargetView = null;
+    pendingExitModule = null;
+    switchView(targetView, true);
+}
+
+function switchView(viewName, force = false) {
+    if (!force) {
+        const activeModule = getActiveTestRunningModule();
+        // If candidate is actively taking a test and attempts to switch to a different view
+        if (activeModule && activeModule !== viewName) {
+            pendingExitModule = activeModule;
+            pendingExitTargetView = viewName;
+            const modal = document.getElementById('modal-exit-test');
+            if (modal) {
+                modal.classList.remove('hidden');
+                return;
+            }
+        }
+    }
+
     toggleMobileDrawer(false); // Dismiss drawer on mobile navigation
     const views = ['dashboard', 'listening', 'reading', 'writing', 'speaking', 'vocabulary', 'settings'];
     views.forEach(v => {

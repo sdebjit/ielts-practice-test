@@ -35,78 +35,90 @@ function populateTestDropdown(mod, tests) {
 async function loadRandomReadingTest(shouldSwitchView = true) {
     try {
         const examType = appSettings.exam_type || currentUser?.exam_type || 'Academic';
-        const res = await fetch(`${API_BASE}/api/tests/random?module=reading&type=${encodeURIComponent(examType)}`);
+        const excludeParam = lastExitedTestId.reading ? `&exclude=${encodeURIComponent(lastExitedTestId.reading)}` : '';
+        const res = await fetch(`${API_BASE}/api/tests/random?module=reading&type=${encodeURIComponent(examType)}${excludeParam}`);
         const test = await res.json();
         if (test && test.id) {
             await loadReadingTest(test.id);
-            if (shouldSwitchView && typeof switchView === 'function') switchView('reading');
+            if (shouldSwitchView && typeof switchView === 'function') switchView('reading', true);
             return;
         }
     } catch (err) {
         console.warn('API random reading fetch fallback:', err);
     }
     if (availableTests.reading && availableTests.reading.length > 0) {
-        const randomItem = availableTests.reading[Math.floor(Math.random() * availableTests.reading.length)];
+        const pool = availableTests.reading.filter(t => t.id !== lastExitedTestId.reading);
+        const candidates = pool.length > 0 ? pool : availableTests.reading;
+        const randomItem = candidates[Math.floor(Math.random() * candidates.length)];
         await loadReadingTest(randomItem.id);
-        if (shouldSwitchView && typeof switchView === 'function') switchView('reading');
+        if (shouldSwitchView && typeof switchView === 'function') switchView('reading', true);
     }
 }
 
 async function loadRandomListeningTest(shouldSwitchView = true) {
     try {
-        const res = await fetch(`${API_BASE}/api/tests/random?module=listening`);
+        const excludeParam = lastExitedTestId.listening ? `&exclude=${encodeURIComponent(lastExitedTestId.listening)}` : '';
+        const res = await fetch(`${API_BASE}/api/tests/random?module=listening${excludeParam}`);
         const test = await res.json();
         if (test && test.id) {
             await loadListeningTest(test.id);
-            if (shouldSwitchView && typeof switchView === 'function') switchView('listening');
+            if (shouldSwitchView && typeof switchView === 'function') switchView('listening', true);
             return;
         }
     } catch (err) {
         console.warn('API random listening fetch fallback:', err);
     }
     if (availableTests.listening && availableTests.listening.length > 0) {
-        const randomItem = availableTests.listening[Math.floor(Math.random() * availableTests.listening.length)];
+        const pool = availableTests.listening.filter(t => t.id !== lastExitedTestId.listening);
+        const candidates = pool.length > 0 ? pool : availableTests.listening;
+        const randomItem = candidates[Math.floor(Math.random() * candidates.length)];
         await loadListeningTest(randomItem.id);
-        if (shouldSwitchView && typeof switchView === 'function') switchView('listening');
+        if (shouldSwitchView && typeof switchView === 'function') switchView('listening', true);
     }
 }
 
 async function loadRandomWritingTask(shouldSwitchView = true) {
     try {
         const examType = appSettings.exam_type || currentUser?.exam_type || 'Academic';
-        const res = await fetch(`${API_BASE}/api/tests/random?module=writing&type=${encodeURIComponent(examType)}`);
+        const excludeParam = lastExitedTestId.writing ? `&exclude=${encodeURIComponent(lastExitedTestId.writing)}` : '';
+        const res = await fetch(`${API_BASE}/api/tests/random?module=writing&type=${encodeURIComponent(examType)}${excludeParam}`);
         const test = await res.json();
         if (test && test.id) {
             await loadWritingTask(test.id);
-            if (shouldSwitchView && typeof switchView === 'function') switchView('writing');
+            if (shouldSwitchView && typeof switchView === 'function') switchView('writing', true);
             return;
         }
     } catch (err) {
         console.warn('API random writing fetch fallback:', err);
     }
     if (availableTests.writing && availableTests.writing.length > 0) {
-        const randomItem = availableTests.writing[Math.floor(Math.random() * availableTests.writing.length)];
+        const pool = availableTests.writing.filter(t => t.id !== lastExitedTestId.writing);
+        const candidates = pool.length > 0 ? pool : availableTests.writing;
+        const randomItem = candidates[Math.floor(Math.random() * candidates.length)];
         await loadWritingTask(randomItem.id);
-        if (shouldSwitchView && typeof switchView === 'function') switchView('writing');
+        if (shouldSwitchView && typeof switchView === 'function') switchView('writing', true);
     }
 }
 
 async function loadRandomSpeakingTest(shouldSwitchView = true) {
     try {
-        const res = await fetch(`${API_BASE}/api/tests/random?module=speaking`);
+        const excludeParam = lastExitedTestId.speaking ? `&exclude=${encodeURIComponent(lastExitedTestId.speaking)}` : '';
+        const res = await fetch(`${API_BASE}/api/tests/random?module=speaking${excludeParam}`);
         const test = await res.json();
         if (test && test.id) {
             await loadSpeakingTest(test.id);
-            if (shouldSwitchView && typeof switchView === 'function') switchView('speaking');
+            if (shouldSwitchView && typeof switchView === 'function') switchView('speaking', true);
             return;
         }
     } catch (err) {
         console.warn('API random speaking fetch fallback:', err);
     }
     if (availableTests.speaking && availableTests.speaking.length > 0) {
-        const randomItem = availableTests.speaking[Math.floor(Math.random() * availableTests.speaking.length)];
+        const pool = availableTests.speaking.filter(t => t.id !== lastExitedTestId.speaking);
+        const candidates = pool.length > 0 ? pool : availableTests.speaking;
+        const randomItem = candidates[Math.floor(Math.random() * candidates.length)];
         await loadSpeakingTest(randomItem.id);
-        if (shouldSwitchView && typeof switchView === 'function') switchView('speaking');
+        if (shouldSwitchView && typeof switchView === 'function') switchView('speaking', true);
     }
 }
 
